@@ -146,6 +146,11 @@ def main() -> None:
         "Position", options=all_positions, default=all_positions
     )
 
+    all_teams = sorted(df["Team"].dropna().unique().tolist())
+    selected_teams = st.sidebar.multiselect(
+        "Team", options=all_teams, default=all_teams
+    )
+
     keeper_only = st.sidebar.checkbox("Keeper picks only", value=False)
 
     min_total = float(df["Total Fpts"].min())
@@ -185,6 +190,7 @@ def main() -> None:
     mask = (
         df["Round"].isin(selected_rounds)
         & df["Position"].isin(selected_positions)
+        & df["Team"].isin(selected_teams)
         & df["Total Fpts"].between(total_range[0], total_range[1])
         & df["Active Fpts"].between(active_range[0], active_range[1])
     )
