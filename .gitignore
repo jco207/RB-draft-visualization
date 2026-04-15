@@ -4,9 +4,6 @@ __pycache__/
 *.py[cod]
 .pytest_cache/
 
-# Generated output
-*-cleaned.csv
-
 # Editor / OS
 .Rhistory
 .DS_Store
