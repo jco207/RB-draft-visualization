@@ -205,19 +205,29 @@ def main() -> None:
         ]
 
     # -----------------------------------------------------------------------
-    # Bar chart — Total Fantasy Points by Pick Number
+    # Metric toggle — shared by both charts
     # -----------------------------------------------------------------------
-    st.subheader("Total Fantasy Points by Overall Pick Number")
+    metric = st.radio(
+        "Fantasy points metric",
+        options=["Total Fpts", "Active Fpts"],
+        horizontal=True,
+    )
+    metric_title = "Total Fantasy Points" if metric == "Total Fpts" else "Active Fantasy Points"
+
+    # -----------------------------------------------------------------------
+    # Bar chart — Fantasy Points by Pick Number
+    # -----------------------------------------------------------------------
+    st.subheader(f"{metric_title} by Overall Pick Number")
 
     if filtered.empty:
         st.info("No picks match the current filters.")
     else:
-        chart = (
+        chart_pick = (
             alt.Chart(filtered)
             .mark_bar()
             .encode(
                 x=alt.X("Pick-Num:O", title="Overall Pick #", sort="ascending"),
-                y=alt.Y("Total Fpts:Q", title="Total Fantasy Points"),
+                y=alt.Y(f"{metric}:Q", title=metric_title),
                 color=alt.Color(
                     "Position:N",
                     scale=alt.Scale(scheme="category10"),
@@ -236,7 +246,35 @@ def main() -> None:
             )
             .properties(height=420)
         )
-        st.altair_chart(chart, width="stretch")
+        st.altair_chart(chart_pick, width="stretch")
+
+    # -----------------------------------------------------------------------
+    # Bar chart — Fantasy Points by Team
+    # -----------------------------------------------------------------------
+    st.subheader(f"{metric_title} by Team")
+
+    if filtered.empty:
+        st.info("No picks match the current filters.")
+    else:
+        team_df = (
+            filtered.groupby("Team", as_index=False)[metric]
+            .sum()
+            .sort_values(metric, ascending=False)
+        )
+        chart_team = (
+            alt.Chart(team_df)
+            .mark_bar()
+            .encode(
+                x=alt.X("Team:N", sort="-y", title="Team"),
+                y=alt.Y(f"{metric}:Q", title=metric_title),
+                tooltip=[
+                    alt.Tooltip("Team:N"),
+                    alt.Tooltip(f"{metric}:Q", title=metric_title, format=".1f"),
+                ],
+            )
+            .properties(height=420)
+        )
+        st.altair_chart(chart_team, width="stretch")
 
     # -----------------------------------------------------------------------
     # Data table
