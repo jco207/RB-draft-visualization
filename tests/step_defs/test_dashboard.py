@@ -123,3 +123,41 @@ def step_output_contains_streamlit(help_result: subprocess.CompletedProcess) -> 
     assert "streamlit run" in combined, (
         f"'streamlit run' not found in output:\n{combined}"
     )
+
+
+# ---------------------------------------------------------------------------
+# Team filter steps
+# ---------------------------------------------------------------------------
+
+def _team_multiselect(app):
+    """Return the Team multiselect widget (sidebar index 2: Round, Position, Team)."""
+    multiselects = app.sidebar.multiselect
+    assert len(multiselects) >= 3, (
+        f"Expected at least 3 sidebar multiselects (Round, Position, Team), "
+        f"found {len(multiselects)}"
+    )
+    return multiselects[2]
+
+
+@then("a team multiselect is present in the sidebar")
+def step_team_multiselect_present(app) -> None:
+    widget = _team_multiselect(app)
+    assert len(widget.options) > 0, "Team multiselect has no options"
+
+
+@then("the team multiselect has all teams selected by default")
+def step_team_multiselect_default(app) -> None:
+    widget = _team_multiselect(app)
+    assert sorted(widget.value) == sorted(widget.options), (
+        f"Team multiselect default does not match all options.\n"
+        f"Selected: {widget.value}\nOptions: {widget.options}"
+    )
+
+
+@when("the team filter is set to one team", target_fixture="app")
+def step_set_one_team(app):
+    widget = _team_multiselect(app)
+    one_team = widget.options[0]
+    widget.set_value([one_team])
+    app.run()
+    return app

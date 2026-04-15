@@ -38,3 +38,16 @@ Feature: Draft Dashboard
   Scenario: Skipped picks are visible in the default view
     When the dashboard app is started
     Then the data table shows all 180 picks by default
+
+  Scenario: Team multiselect is present in the sidebar
+    When the dashboard app is started
+    Then a team multiselect is present in the sidebar
+
+  Scenario: Team multiselect defaults to all teams
+    When the dashboard app is started
+    Then the team multiselect has all teams selected by default
+
+  Scenario: Filtering by a single team runs without errors
+    When the dashboard app is started
+    And the team filter is set to one team
+    Then no exceptions are raised during startup
