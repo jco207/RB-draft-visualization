@@ -94,6 +94,7 @@ def load_data(csv_path: str) -> pd.DataFrame:
     df["Active Fpts"] = pd.to_numeric(df["Active Fpts"], errors="coerce").fillna(0.0)
     df["Keeper"] = df["Keeper"].astype(bool)
     df["Position"] = df["Position"].fillna("").astype(str)
+    df["Team"] = df["Team"].fillna("").astype(str)
     df["Rank"] = df["Rank"].fillna("").astype(str)
     return df
 
@@ -101,6 +102,9 @@ def load_data(csv_path: str) -> pd.DataFrame:
 # ---------------------------------------------------------------------------
 # Main Streamlit app
 # ---------------------------------------------------------------------------
+
+_CLI_ARGS = _parse_cli_args()
+
 
 def main() -> None:
     st.set_page_config(
@@ -111,8 +115,7 @@ def main() -> None:
     st.title("Fantasy Football Draft Dashboard")
 
     # Resolve data path
-    args = _parse_cli_args()
-    csv_path = _find_cleaned_csv(args.data)
+    csv_path = _find_cleaned_csv(_CLI_ARGS.data)
 
     if csv_path is None or not csv_path.exists():
         st.error(
@@ -146,7 +149,7 @@ def main() -> None:
         "Position", options=all_positions, default=all_positions
     )
 
-    all_teams = sorted(df["Team"].dropna().unique().tolist())
+    all_teams = sorted(df["Team"].unique().tolist())
     selected_teams = st.sidebar.multiselect(
         "Team", options=all_teams, default=all_teams
     )
@@ -214,14 +217,13 @@ def main() -> None:
     )
     metric_title = "Total Fantasy Points" if metric == "Total Fpts" else "Active Fantasy Points"
 
-    # -----------------------------------------------------------------------
-    # Bar chart — Fantasy Points by Pick Number
-    # -----------------------------------------------------------------------
-    st.subheader(f"{metric_title} by Overall Pick Number")
-
     if filtered.empty:
         st.info("No picks match the current filters.")
     else:
+        # -------------------------------------------------------------------
+        # Bar chart — Fantasy Points by Pick Number
+        # -------------------------------------------------------------------
+        st.subheader(f"{metric_title} by Overall Pick Number")
         chart_pick = (
             alt.Chart(filtered)
             .mark_bar()
@@ -246,16 +248,12 @@ def main() -> None:
             )
             .properties(height=420)
         )
-        st.altair_chart(chart_pick, width="stretch")
+        st.altair_chart(chart_pick, use_container_width=True)
 
-    # -----------------------------------------------------------------------
-    # Bar chart — Fantasy Points by Team
-    # -----------------------------------------------------------------------
-    st.subheader(f"{metric_title} by Team")
-
-    if filtered.empty:
-        st.info("No picks match the current filters.")
-    else:
+        # -------------------------------------------------------------------
+        # Bar chart — Fantasy Points by Team
+        # -------------------------------------------------------------------
+        st.subheader(f"{metric_title} by Team")
         team_df = (
             filtered.groupby("Team", as_index=False)[metric]
             .sum()
@@ -274,13 +272,13 @@ def main() -> None:
             )
             .properties(height=420)
         )
-        st.altair_chart(chart_team, width="stretch")
+        st.altair_chart(chart_team, use_container_width=True)
 
     # -----------------------------------------------------------------------
     # Data table
     # -----------------------------------------------------------------------
     st.subheader(f"Draft Picks  ({len(filtered):,} shown of {len(df):,})")
-    st.dataframe(filtered.reset_index(drop=True), width="stretch")
+    st.dataframe(filtered.reset_index(drop=True), use_container_width=True)
 
     # -----------------------------------------------------------------------
     # Download button
