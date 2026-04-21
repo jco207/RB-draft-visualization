@@ -20,6 +20,7 @@ Dependencies:
 import argparse
 import sys
 from pathlib import Path
+from typing import Optional
 
 import altair as alt
 import pandas as pd
@@ -74,7 +75,7 @@ def _parse_cli_args() -> argparse.Namespace:
 # Data loading
 # ---------------------------------------------------------------------------
 
-def _find_cleaned_csv(data_arg: str | None) -> Path | None:
+def _find_cleaned_csv(data_arg: Optional[str]) -> Optional[Path]:
     """Resolve the cleaned CSV path from CLI arg or by auto-detecting in the project root."""
     if data_arg:
         return Path(data_arg)
