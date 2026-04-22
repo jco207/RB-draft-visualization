@@ -1,0 +1,181 @@
+Round,Pick,Team,Player,Position,NFL Team
+1,1,Mulvihill Machine,Christian McCaffrey,RB,SF
+1,2,Dude Abides,Dalvin Cook,RB,DAL
+1,3,Chicken Dinner,Alvin Kamara,RB,NO
+1,4,OnStar,Ezekiel Elliott,RB,LAC
+1,5,Steel Your League,Nick Chubb,RB,HOU
+1,6,Prometheus Out of Bounds,Travis Kelce,TE,KC
+1,7,Three-Eyed RAVEN,Aaron Jones,RB,MIN
+1,8,Juggernaut,Patrick Mahomes,QB,KC
+1,9,Rumblin' Stumblers,Joe Mixon,RB,HOU
+1,10,Pallino Primos,Davante Adams,WR,LAR
+1,11,Soaring Marmots,Jonathan Taylor,RB,IND
+1,12,Ruff Necks,Najee Harris,RB,LAC
+2,1,Ruff Necks,Tyreek Hill,WR,MIA
+2,2,Soaring Marmots,Kyler Murray,QB,MIN
+2,3,Pallino Primos,Saquon Barkley,RB,PHI
+2,4,Rumblin' Stumblers,Chris Carson,RB,N/A
+2,5,Juggernaut,George Kittle,TE,SF
+2,6,Three-Eyed RAVEN,Calvin Ridley,WR,TEN
+2,7,Prometheus Out of Bounds,Clyde Edwards-Helaire,RB,KC
+2,8,Steel Your League,DeAndre Hopkins,WR,BAL
+2,9,OnStar,Allen Robinson,WR,DET
+2,10,Chicken Dinner,D'Andre Swift,RB,CHI
+2,11,Dude Abides,Keenan Allen,WR,LAC
+2,12,Mulvihill Machine,Robert Woods,WR,PIT
+3,1,Mulvihill Machine,Tyler Lockett,WR,LV
+3,2,Dude Abides,Gus Edwards,RB,LAC
+3,3,Chicken Dinner,Miles Sanders,RB,DAL
+3,4,OnStar,Mark Andrews,TE,BAL
+3,5,Steel Your League,Amari Cooper,WR,LV
+3,6,Prometheus Out of Bounds,(Skipped Pick),N/A,N/A
+3,7,Three-Eyed RAVEN,Kyle Pitts,TE,ATL
+3,8,Juggernaut,Justin Herbert,QB,LAC
+3,9,Rumblin' Stumblers,(Skipped Pick),N/A,N/A
+3,10,Pallino Primos,Myles Gaskin,RB,SEA
+3,11,Soaring Marmots,Cooper Kupp,WR,SEA
+3,12,Ruff Necks,Mike Davis,RB,N/A
+4,1,Ruff Necks,(Skipped Pick),N/A,N/A
+4,2,Soaring Marmots,Damien Harris,RB,BUF
+4,3,Pallino Primos,Diontae Johnson,WR,CLE
+4,4,Rumblin' Stumblers,Chase Claypool,WR,BUF
+4,5,Juggernaut,Raheem Mostert,RB,LV
+4,6,Three-Eyed RAVEN,Chase Edmonds,RB,WAS
+4,7,Prometheus Out of Bounds,Chris Godwin,WR,TB
+4,8,Steel Your League,Logan Thomas,TE,SF
+4,9,OnStar,DJ Moore,WR,BUF
+4,10,Chicken Dinner,Julio Jones,WR,N/A
+4,11,Dude Abides,(Skipped Pick),N/A,N/A
+4,12,Mulvihill Machine,Josh Jacobs,RB,GB
+5,1,Mulvihill Machine,Dak Prescott,QB,DAL
+5,2,Dude Abides,(Skipped Pick),N/A,N/A
+5,3,Chicken Dinner,Tom Brady,QB,N/A
+5,4,OnStar,(Skipped Pick),N/A,N/A
+5,5,Steel Your League,(Skipped Pick),N/A,N/A
+5,6,Prometheus Out of Bounds,(Skipped Pick),N/A,N/A
+5,7,Three-Eyed RAVEN,(Skipped Pick),N/A,N/A
+5,8,Juggernaut,Kareem Hunt,RB,KC
+5,9,Rumblin' Stumblers,Mike Evans,WR,SF
+5,10,Pallino Primos,(Skipped Pick),N/A,N/A
+5,11,Soaring Marmots,Adam Thielen,WR,PIT
+5,12,Ruff Necks,Jerry Jeudy,WR,CLE
+6,1,Ruff Necks,Ja'Marr Chase,WR,CIN
+6,2,Soaring Marmots,Noah Fant,TE,NO
+6,3,Pallino Primos,Tyler Higbee,TE,LAR
+6,4,Rumblin' Stumblers,Rams,DST,LAR
+6,5,Juggernaut,Javonte Williams,RB,DAL
+6,6,Three-Eyed RAVEN,Brandon Aiyuk,WR,SF
+6,7,Prometheus Out of Bounds,Darrell Henderson Jr.,RB,N/A
+6,8,Steel Your League,Melvin Gordon,RB,N/A
+6,9,OnStar,Tyler Boyd,WR,TEN
+6,10,Chicken Dinner,Ravens,DST,BAL
+6,11,Dude Abides,Robert Tonyan,TE,KC
+6,12,Mulvihill Machine,Trey Sermon,RB,PIT
+7,1,Mulvihill Machine,Dallas Goedert,TE,PHI
+7,2,Dude Abides,Ryan Tannehill,QB,TEN
+7,3,Chicken Dinner,Hunter Henry,TE,NE
+7,4,OnStar,Jalen Hurts,QB,PHI
+7,5,Steel Your League,Matthew Stafford,QB,LAR
+7,6,Prometheus Out of Bounds,Tee Higgins,WR,CIN
+7,7,Three-Eyed RAVEN,Ronald Jones,RB,N/A
+7,8,Juggernaut,Buccaneers,DST,TB
+7,9,Rumblin' Stumblers,Courtland Sutton,WR,DEN
+7,10,Pallino Primos,Kenny Golladay,WR,N/A
+7,11,Soaring Marmots,Commanders,DST,WAS
+7,12,Ruff Necks,Trevor Lawrence,QB,JAC
+8,1,Ruff Necks,JuJu Smith-Schuster,WR,KC
+8,2,Soaring Marmots,Robbie Chosen,WR,WAS
+8,3,Pallino Primos,(Skipped Pick),N/A,N/A
+8,4,Rumblin' Stumblers,(Skipped Pick),N/A,N/A
+8,5,Juggernaut,Marvin Jones,WR,N/A
+8,6,Three-Eyed RAVEN,Corey Davis,WR,N/A
+8,7,Prometheus Out of Bounds,Jamaal Williams,RB,NO
+8,8,Steel Your League,Steelers,DST,PIT
+8,9,OnStar,(Skipped Pick),N/A,N/A
+8,10,Chicken Dinner,(Skipped Pick),N/A,N/A
+8,11,Dude Abides,Antonio Brown,WR,TB
+8,12,Mulvihill Machine,Broncos,DST,DEN
+9,1,Mulvihill Machine,Jaylen Waddle,WR,DEN
+9,2,Dude Abides,49ers,DST,SF
+9,3,Chicken Dinner,Michael Carter,RB,TEN
+9,4,OnStar,James White,RB,N/A
+9,5,Steel Your League,Leonard Fournette,RB,N/A
+9,6,Prometheus Out of Bounds,Joe Burrow,QB,CIN
+9,7,Three-Eyed RAVEN,(Skipped Pick),N/A,N/A
+9,8,Juggernaut,Jamison Crowder,WR,WAS
+9,9,Rumblin' Stumblers,Marquez Callaway,WR,LV
+9,10,Pallino Primos,Jonnu Smith,TE,PIT
+9,11,Soaring Marmots,AJ Dillon,RB,CAR
+9,12,Ruff Necks,Odell Beckham Jr.,WR,MIA
+10,1,Ruff Necks,James Conner,RB,ARI
+10,2,Soaring Marmots,Laviska Shenault Jr.,WR,BUF
+10,3,Pallino Primos,Dolphins,DST,MIA
+10,4,Rumblin' Stumblers,Emmanuel Sanders,WR,N/A
+10,5,Juggernaut,J.D. McKissic,RB,N/A
+10,6,Three-Eyed RAVEN,Sony Michel,RB,N/A
+10,7,Prometheus Out of Bounds,Devin Singletary,RB,NYG
+10,8,Steel Your League,Deebo Samuel,WR,WAS
+10,9,OnStar,Greg Zuerlein,K,NYJ
+10,10,Chicken Dinner,Brandin Cooks,WR,BUF
+10,11,Dude Abides,Phillip Lindsay,RB,N/A
+10,12,Mulvihill Machine,DeVonta Smith,WR,PHI
+11,1,Mulvihill Machine,Kenyan Drake,RB,N/A
+11,2,Dude Abides,Michael Pittman,WR,PIT
+11,3,Chicken Dinner,Curtis Samuel,WR,BUF
+11,4,OnStar,Nyheim Miller-Hines,RB,NO
+11,5,Steel Your League,Justin Tucker,K,BAL
+11,6,Prometheus Out of Bounds,Will Fuller,WR,N/A
+11,7,Three-Eyed RAVEN,Michael Thomas,WR,NO
+11,8,Juggernaut,Giovani Bernard,RB,N/A
+11,9,Rumblin' Stumblers,Jared Cook,TE,N/A
+11,10,Pallino Primos,DJ Chark,WR,ATL
+11,11,Soaring Marmots,Harrison Butker,K,KC
+11,12,Ruff Necks,(Skipped Pick),N/A,N/A
+12,1,Ruff Necks,Patriots,DST,NE
+12,2,Soaring Marmots,Jakobi Meyers,WR,JAC
+12,3,Pallino Primos,Darnell Mooney,WR,NYG
+12,4,Rumblin' Stumblers,Tony Jones,RB,ARI
+12,5,Juggernaut,Mike Gesicki,TE,CIN
+12,6,Three-Eyed RAVEN,Marquise Brown,WR,PHI
+12,7,Prometheus Out of Bounds,Justin Fields,QB,KC
+12,8,Steel Your League,Kirk Cousins,QB,LV
+12,9,OnStar,Saints,DST,NO
+12,10,Chicken Dinner,Zack Moss,RB,CIN
+12,11,Dude Abides,Trey Lance,QB,LAC
+12,12,Mulvihill Machine,Younghoe Koo,K,NYG
+13,1,Mulvihill Machine,Rob Gronkowski,TE,N/A
+13,2,Dude Abides,Ryan Succop,K,N/A
+13,3,Chicken Dinner,Ty'Son Williams,RB,N/A
+13,4,OnStar,Zach Ertz,TE,WAS
+13,5,Steel Your League,Jarvis Landry,WR,N/A
+13,6,Prometheus Out of Bounds,Jason Sanders,K,MIA
+13,7,Three-Eyed RAVEN,Tyler Bass,K,BUF
+13,8,Juggernaut,David Johnson,RB,N/A
+13,9,Rumblin' Stumblers,Michael Gallup,WR,WAS
+13,10,Pallino Primos,Brandon McManus,K,GB
+13,11,Soaring Marmots,Matt Ryan,QB,N/A
+13,12,Ruff Necks,Rodrigo Blankenship,K,N/A
+14,1,Ruff Necks,Ben Roethlisberger,QB,N/A
+14,2,Soaring Marmots,Tony Pollard,RB,TEN
+14,3,Pallino Primos,Elijah Moore,WR,PHI
+14,4,Rumblin' Stumblers,Robbie Gould,K,N/A
+14,5,Juggernaut,Evan Engram,TE,DEN
+14,6,Three-Eyed RAVEN,Colts,DST,IND
+14,7,Prometheus Out of Bounds,Gerald Everett,TE,CHI
+14,8,Steel Your League,Pat Freiermuth,TE,PIT
+14,9,OnStar,Mark Ingram,RB,N/A
+14,10,Chicken Dinner,Daniel Carlson,K,LV
+14,11,Dude Abides,Rondale Moore,WR,MIN
+14,12,Mulvihill Machine,Tua Tagovailoa,QB,ATL
+15,1,Mulvihill Machine,Tevin Coleman,RB,N/A
+15,2,Dude Abides,Cole Kmet,TE,CHI
+15,3,Chicken Dinner,(Skipped Pick),N/A,N/A
+15,4,OnStar,Russell Gage,WR,SF
+15,5,Steel Your League,Ty Johnson,RB,BUF
+15,6,Prometheus Out of Bounds,Chiefs,DST,KC
+15,7,Three-Eyed RAVEN,Josh Palmer,WR,BUF
+15,8,Juggernaut,Jason Myers,K,SEA
+15,9,Rumblin' Stumblers,Baker Mayfield,QB,TB
+15,10,Pallino Primos,Jameis Winston,QB,NYG
+15,11,Soaring Marmots,Anthony Firkser,TE,DET
+15,12,Ruff Necks,Rashod Bateman,WR,BAL

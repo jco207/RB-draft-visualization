@@ -4,7 +4,7 @@ Visualization of Real Ballerz fantasy football draft.
 
 ## Setup
 
-Requires Python 3.10+.
+Requires Python 3.9+.
 
 ```bash
 bash setup_venv.sh
@@ -19,15 +19,28 @@ This creates a virtual environment and installs all dependencies (`pandas`, `str
 
 ### `scripts/clean_draft.py` — Data Cleaner
 
-Reads the raw multi-round draft CSV and normalises it into a flat table. Adds computed columns, strips formatting artifacts, and writes a cleaned CSV alongside a data quality report.
+Reads a raw draft CSV and normalises it into a flat table with a consistent schema. Auto-detects the input format based on CSV structure, supporting all seasons from 2020 onwards.
 
-**Added columns:**
+**Supported input formats:**
+
+| Format | Years | Structure |
+|--------|-------|-----------|
+| A | 2025 | Alternating "Round N" separators + repeated headers; columns: Pick, Team, Player, Elapsed Time, Rank, Total Fpts, Active Fpts |
+| B | 2021–2024 | Flat CSV with a single header row; columns: Round, Pick, Team, Player, Position, NFL Team |
+| C | 2020 | Alternating "Round N" separators + repeated headers; columns: Pick, Team, Player, Elig, Elapsed Time |
+
+**Output columns (all formats):**
+
+`Round`, `Pick`, `Pick-Num`, `Team`, `Player`, `Position`, `Keeper`, `Starred`, `Elapsed Time`, `Rank`, `Total Fpts`, `Active Fpts`
+
+Columns unavailable in a given format are written as empty (NaN).
+
+**Computed columns:**
 
 | Column | Description |
 |--------|-------------|
-| `Round` | Round number (1–15) |
 | `Pick-Num` | Overall sequential pick: `((Round - 1) × 12) + Pick` |
-| `Position` | Extracted from the player string (QB / RB / WR / TE / K / DST) |
+| `Position` | Extracted from the player string (QB / RB / WR / TE / K / DST / DEF) |
 | `Keeper` | `True` if the pick was flagged as `(Keeper)` |
 | `Starred` | `True` if the player was prefixed with `*` in the raw data |
 
@@ -35,7 +48,7 @@ Reads the raw multi-round draft CSV and normalises it into a flat table. Adds co
 
 ```bash
 python scripts/clean_draft.py data/2025_Pre-season_Pre-season.csv
-python scripts/clean_draft.py data/2025_Pre-season_Pre-season.csv --output path/to/output.csv
+python scripts/clean_draft.py data/2021_Ballers_draft.csv --output path/to/output.csv
 python scripts/clean_draft.py --help
 ```
 
@@ -50,13 +63,14 @@ Interactive dark-themed dashboard for exploring the cleaned draft data.
 **Features:**
 - Sidebar filters by round, position, keeper status, total/active fantasy points, and rank
 - Bar chart of total fantasy points per overall pick number, coloured by position
+- Team totals bar chart with metric toggle (Total Fpts / Active Fpts)
 - Filterable data table
 - Download button to export the current filtered view as CSV
 
 **Usage:**
 
 ```bash
-# Auto-detects the cleaned CSV in the project root
+# Auto-detects the most recent cleaned CSV in data/
 streamlit run scripts/dashboard.py
 
 # Specify a cleaned CSV explicitly
@@ -74,7 +88,10 @@ python scripts/dashboard.py --help
 
 ```bash
 source venv/bin/activate
+# Clean any supported season (format is auto-detected)
 python scripts/clean_draft.py data/2025_Pre-season_Pre-season.csv
+python scripts/clean_draft.py data/2021_Ballers_draft.csv
+# Launch the dashboard (auto-detects the most recent cleaned CSV in data/)
 streamlit run scripts/dashboard.py
 ```
 
@@ -93,7 +110,8 @@ Feature files and what they cover:
 
 | File | Covers |
 |------|--------|
-| `tests/features/clean_draft.feature` | Column presence, Pick-Num formula, separator/header row removal, keeper/position/asterisk extraction |
+| `tests/features/clean_draft.feature` | Column presence, Pick-Num formula, separator/header row removal, keeper/position/asterisk extraction (Format A / 2025) |
+| `tests/features/clean_draft_formats.feature` | Multi-format support: output schema, NaN columns, Pick-Num, position, and asterisk handling for Format B (2021) and Format C (2020) |
 | `tests/features/dashboard.feature` | App load, widget rendering, download button, `--help` flag, slider safety, position filter completeness |
 
 To add a test for a new defect: add a `Scenario:` to the relevant `.feature` file, verify it fails, fix the code, then verify it passes. See `.claude/skills/draft-visualization.md` for the full coding standards.
@@ -107,19 +125,26 @@ To add a test for a new defect: add a `Scenario:` to the relevant `.feature` fil
 ├── setup_venv.sh                          # One-shot venv + dependency setup
 ├── requirements.txt
 ├── data/
-│   ├── 2025_Pre-season_Pre-season.csv     # Raw draft export
-│   └── 2025_Pre-season_Pre-season-cleaned.csv  # Produced by clean_draft.py
+│   ├── 2020_Ballers_draft.csv             # Raw draft exports (one per season)
+│   ├── 2020_Ballers_draft-cleaned.csv     # Produced by clean_draft.py
+│   ├── 2021_Ballers_draft.csv
+│   ├── 2021_Ballers_draft-cleaned.csv
+│   ├── ...
+│   ├── 2025_Pre-season_Pre-season.csv
+│   └── 2025_Pre-season_Pre-season-cleaned.csv
 ├── scripts/
-│   ├── clean_draft.py                     # Data cleaning script
+│   ├── clean_draft.py                     # Data cleaning script (multi-format)
 │   ├── dashboard.py                       # Streamlit dashboard
 │   └── MANIFEST.md                        # Script dependency table
 ├── tests/
-│   ├── conftest.py                        # Shared pytest fixtures
+│   ├── conftest.py                        # Shared pytest fixtures (2020, 2021, 2025)
 │   ├── features/
 │   │   ├── clean_draft.feature
+│   │   ├── clean_draft_formats.feature    # Multi-format (2020, 2021) scenarios
 │   │   └── dashboard.feature
 │   └── step_defs/
 │       ├── test_clean_draft.py
+│       ├── test_clean_draft_formats.py
 │       └── test_dashboard.py
 └── .claude/
     └── skills/
