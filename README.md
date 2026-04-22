@@ -19,15 +19,15 @@ This creates a virtual environment and installs all dependencies (`pandas`, `str
 
 ### `scripts/clean_draft.py` — Data Cleaner
 
-Reads a raw draft CSV and normalises it into a flat table with a consistent schema. Auto-detects the input format based on CSV structure, supporting all seasons from 2020 onwards.
+Reads a raw draft CSV and normalises it into a flat table with a consistent schema. Auto-detects the input format based on CSV structure, supporting all seasons from 2019 onwards.
 
 **Supported input formats:**
 
 | Format | Years | Structure |
 |--------|-------|-----------|
 | A | 2025 | Alternating "Round N" separators + repeated headers; columns: Pick, Team, Player, Elapsed Time, Rank, Total Fpts, Active Fpts |
-| B | 2021–2024 | Flat CSV with a single header row; columns: Round, Pick, Team, Player, Position, NFL Team |
-| C | 2020 | Alternating "Round N" separators + repeated headers; columns: Pick, Team, Player, Elig, Elapsed Time |
+| B | 2019–2024 | Flat CSV with a single header row; columns: Round, Pick, Team, Player, Position, NFL Team (Elapsed Time, Total Fpts, Active Fpts present in some seasons) |
+| C | — | Alternating "Round N" separators + repeated headers; columns: Pick, Team, Player, Elig, Elapsed Time (supported for external files with this structure) |
 
 **Output columns (all formats):**
 
@@ -48,7 +48,7 @@ Columns unavailable in a given format are written as empty (NaN).
 
 ```bash
 python scripts/clean_draft.py data/2025_Pre-season_Pre-season.csv
-python scripts/clean_draft.py data/2021_Ballers_draft.csv --output path/to/output.csv
+python scripts/clean_draft.py data/2021-draft.csv --output path/to/output.csv
 python scripts/clean_draft.py --help
 ```
 
@@ -61,9 +61,12 @@ Output is saved as `<input-stem>-cleaned.csv` beside the input file by default.
 Interactive dark-themed dashboard for exploring the cleaned draft data.
 
 **Features:**
+- Sidebar year picker to switch between all available seasons
 - Sidebar filters by round, position, keeper status, total/active fantasy points, and rank
-- Bar chart of total fantasy points per overall pick number, coloured by position
+- Bar chart of fantasy points per overall pick number, coloured by position
 - Team totals bar chart with metric toggle (Total Fpts / Active Fpts)
+- Best & Worst Pick by Round table (only shown when fantasy-points data is present)
+- Best & Worst Pick by Team table (only shown when fantasy-points data is present)
 - Filterable data table
 - Download button to export the current filtered view as CSV
 
@@ -90,7 +93,7 @@ python scripts/dashboard.py --help
 source venv/bin/activate
 # Clean any supported season (format is auto-detected)
 python scripts/clean_draft.py data/2025_Pre-season_Pre-season.csv
-python scripts/clean_draft.py data/2021_Ballers_draft.csv
+python scripts/clean_draft.py data/2021-draft.csv
 # Launch the dashboard (auto-detects the most recent cleaned CSV in data/)
 streamlit run scripts/dashboard.py
 ```
@@ -125,11 +128,18 @@ To add a test for a new defect: add a `Scenario:` to the relevant `.feature` fil
 ├── setup_venv.sh                          # One-shot venv + dependency setup
 ├── requirements.txt
 ├── data/
-│   ├── 2020_Ballers_draft.csv             # Raw draft exports (one per season)
-│   ├── 2020_Ballers_draft-cleaned.csv     # Produced by clean_draft.py
-│   ├── 2021_Ballers_draft.csv
-│   ├── 2021_Ballers_draft-cleaned.csv
-│   ├── ...
+│   ├── 2019-draft.csv                     # Raw draft exports (one per season)
+│   ├── 2019-draft-cleaned.csv             # Produced by clean_draft.py
+│   ├── 2020-draft.csv
+│   ├── 2020-draft-cleaned.csv
+│   ├── 2021-draft.csv
+│   ├── 2021-draft-cleaned.csv
+│   ├── 2022-draft.csv
+│   ├── 2022-draft-cleaned.csv
+│   ├── 2023-draft.csv
+│   ├── 2023-draft-cleaned.csv
+│   ├── 2024_Ballers_draft.csv
+│   ├── 2024_Ballers_draft-cleaned.csv
 │   ├── 2025_Pre-season_Pre-season.csv
 │   └── 2025_Pre-season_Pre-season-cleaned.csv
 ├── scripts/

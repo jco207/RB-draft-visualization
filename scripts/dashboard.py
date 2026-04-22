@@ -296,6 +296,54 @@ def main() -> None:
         )
         st.altair_chart(chart_team, use_container_width=True)
 
+        # -------------------------------------------------------------------
+        # Best / Worst pick tables — only when fantasy-points data is present
+        # -------------------------------------------------------------------
+        has_fpts = (filtered[metric] > 0).any()
+
+        if has_fpts:
+            st.subheader("Best & Worst Pick by Round")
+            round_rows = []
+            for rnd in sorted(filtered["Round"].unique()):
+                rnd_df = filtered[filtered["Round"] == rnd]
+                best = rnd_df.loc[rnd_df[metric].idxmax()]
+                worst = rnd_df.loc[rnd_df[metric].idxmin()]
+                round_rows.append({
+                    "Round": rnd,
+                    "Best Pick": best["Player"],
+                    "Best Team": best["Team"],
+                    f"Best {metric}": round(float(best[metric]), 1),
+                    "Worst Pick": worst["Player"],
+                    "Worst Team": worst["Team"],
+                    f"Worst {metric}": round(float(worst[metric]), 1),
+                })
+            st.dataframe(
+                pd.DataFrame(round_rows),
+                use_container_width=True,
+                hide_index=True,
+            )
+
+            st.subheader("Best & Worst Pick by Team")
+            team_rows = []
+            for team in sorted(filtered["Team"].unique()):
+                team_df = filtered[filtered["Team"] == team]
+                best = team_df.loc[team_df[metric].idxmax()]
+                worst = team_df.loc[team_df[metric].idxmin()]
+                team_rows.append({
+                    "Team": team,
+                    "Best Pick": best["Player"],
+                    "Best Round": int(best["Round"]),
+                    f"Best {metric}": round(float(best[metric]), 1),
+                    "Worst Pick": worst["Player"],
+                    "Worst Round": int(worst["Round"]),
+                    f"Worst {metric}": round(float(worst[metric]), 1),
+                })
+            st.dataframe(
+                pd.DataFrame(team_rows),
+                use_container_width=True,
+                hide_index=True,
+            )
+
     # -----------------------------------------------------------------------
     # Data table
     # -----------------------------------------------------------------------
