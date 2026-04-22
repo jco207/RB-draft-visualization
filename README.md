@@ -34,8 +34,8 @@ Reads the raw multi-round draft CSV and normalises it into a flat table. Adds co
 **Usage:**
 
 ```bash
-python scripts/clean_draft.py 2025_Pre-season_Pre-season.csv
-python scripts/clean_draft.py 2025_Pre-season_Pre-season.csv --output path/to/output.csv
+python scripts/clean_draft.py data/2025_Pre-season_Pre-season.csv
+python scripts/clean_draft.py data/2025_Pre-season_Pre-season.csv --output path/to/output.csv
 python scripts/clean_draft.py --help
 ```
 
@@ -74,7 +74,7 @@ python scripts/dashboard.py --help
 
 ```bash
 source venv/bin/activate
-python scripts/clean_draft.py 2025_Pre-season_Pre-season.csv
+python scripts/clean_draft.py data/2025_Pre-season_Pre-season.csv
 streamlit run scripts/dashboard.py
 ```
 
@@ -106,6 +106,9 @@ To add a test for a new defect: add a `Scenario:` to the relevant `.feature` fil
 .
 ├── setup_venv.sh                          # One-shot venv + dependency setup
 ├── requirements.txt
+├── data/
+│   ├── 2025_Pre-season_Pre-season.csv     # Raw draft export
+│   └── 2025_Pre-season_Pre-season-cleaned.csv  # Produced by clean_draft.py
 ├── scripts/
 │   ├── clean_draft.py                     # Data cleaning script
 │   ├── dashboard.py                       # Streamlit dashboard

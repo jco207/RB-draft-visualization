@@ -16,7 +16,7 @@ added, removed, or its inputs/outputs change.
 source venv/bin/activate
 
 # 1. Clean the raw draft data
-python scripts/clean_draft.py 2025_Pre-season_Pre-season.csv
+python scripts/clean_draft.py data/2025_Pre-season_Pre-season.csv
 
 # 2. Launch the dashboard (requires the cleaned CSV from step 1)
 streamlit run scripts/dashboard.py

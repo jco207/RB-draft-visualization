@@ -19,7 +19,7 @@ Usage:
     python scripts/clean_draft.py <INPUT_CSV> [--output <PATH>]
 
 Examples:
-    python scripts/clean_draft.py 2025_Pre-season_Pre-season.csv
+    python scripts/clean_draft.py data/2025_Pre-season_Pre-season.csv
     python scripts/clean_draft.py data/draft.csv --output data/draft-cleaned.csv
 """
 

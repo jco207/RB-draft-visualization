@@ -80,7 +80,7 @@ def _find_cleaned_csv(data_arg: Optional[str]) -> Optional[Path]:
     if data_arg:
         return Path(data_arg)
     project_root = Path(__file__).parent.parent
-    candidates = sorted(project_root.glob("*-cleaned.csv"))
+    candidates = sorted((project_root / "data").glob("*-cleaned.csv"))
     return candidates[-1] if candidates else None
 
 
@@ -123,7 +123,7 @@ def main() -> None:
             "Cleaned draft CSV not found. "
             "Run the cleaner first:\n\n"
             "```\n"
-            "python scripts/clean_draft.py 2025_Pre-season_Pre-season.csv\n"
+            "python scripts/clean_draft.py data/2025_Pre-season_Pre-season.csv\n"
             "```"
         )
         return

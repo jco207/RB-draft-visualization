@@ -16,7 +16,7 @@ FEATURE_FILE = Path(__file__).parent.parent / "features" / "clean_draft.feature"
 scenarios(str(FEATURE_FILE))
 
 PROJECT_ROOT = Path(__file__).parent.parent.parent
-RAW_CSV = PROJECT_ROOT / "2025_Pre-season_Pre-season.csv"
+RAW_CSV = PROJECT_ROOT / "data" / "2025_Pre-season_Pre-season.csv"
 
 VALID_POSITIONS = {"QB", "RB", "WR", "TE", "K", "DEF", "DST", ""}
 

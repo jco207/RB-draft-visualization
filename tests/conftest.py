@@ -12,8 +12,8 @@ import pandas as pd
 import pytest
 
 PROJECT_ROOT = Path(__file__).parent.parent
-RAW_CSV = PROJECT_ROOT / "2025_Pre-season_Pre-season.csv"
-CLEANED_CSV = PROJECT_ROOT / "2025_Pre-season_Pre-season-cleaned.csv"
+RAW_CSV = PROJECT_ROOT / "data" / "2025_Pre-season_Pre-season.csv"
+CLEANED_CSV = PROJECT_ROOT / "data" / "2025_Pre-season_Pre-season-cleaned.csv"
 CLEAN_SCRIPT = PROJECT_ROOT / "scripts" / "clean_draft.py"
 
 
