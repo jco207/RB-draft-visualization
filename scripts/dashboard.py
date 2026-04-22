@@ -3,8 +3,17 @@
 dashboard.py — Fantasy Football Draft Dashboard (Streamlit)
 
 Interactive dashboard for exploring a cleaned fantasy draft CSV. Provides
-sidebar filters, a bar chart of fantasy points by pick number, a data table,
+sidebar filters, charts, VBD analysis, best/worst pick tables, a data table,
 and a CSV download button.
+
+Sidebar filters: year, round, position, team, keeper status, total/active
+fantasy points range, and rank substring.
+
+Metric toggle (shared by all charts and tables): Total Fpts, Active Fpts, VBD.
+
+VBD (Value Based Drafting): each player's Total Fpts minus the positional
+baseline for a league of t teams. Baseline = t-th ranked player at the
+position (floor(t * 1.5)-th for RB and WR). VBD/g = VBD / 17 games.
 
 Run with Streamlit (required):
     streamlit run scripts/dashboard.py
@@ -18,6 +27,7 @@ Dependencies:
 """
 
 import argparse
+import math
 import sys
 from pathlib import Path
 from typing import Optional
@@ -113,6 +123,48 @@ def load_data(csv_path: str) -> pd.DataFrame:
 
 
 # ---------------------------------------------------------------------------
+# VBD (Value Based Drafting)
+# ---------------------------------------------------------------------------
+
+_VBD_FLEX_POSITIONS = {"RB", "WR"}
+_FANTASY_GAMES_PER_SEASON = 17
+
+
+def _vbd_baselines(df: pd.DataFrame, t: int) -> dict:
+    """
+    Compute the VBD baseline Total Fpts for each position in a t-team league.
+
+    Baseline = Total Fpts of the t-th ranked player at the position (by Total
+    Fpts descending).  RB and WR use floor(t * 1.5) as the rank threshold to
+    account for flex roster spots.  If fewer players exist at a position than
+    the threshold, the lowest-scoring player is used as the baseline.
+    """
+    baselines: dict = {}
+    for pos, pos_df in df.groupby("Position"):
+        if not pos:
+            continue
+        multiplier = 1.5 if pos in _VBD_FLEX_POSITIONS else 1.0
+        rank = math.floor(t * multiplier)
+        sorted_fpts = (
+            pos_df["Total Fpts"]
+            .sort_values(ascending=False)
+            .reset_index(drop=True)
+        )
+        idx = min(rank - 1, len(sorted_fpts) - 1)
+        baselines[pos] = float(sorted_fpts.iloc[idx])
+    return baselines
+
+
+def compute_vbd(df: pd.DataFrame, t: int) -> pd.Series:
+    """Return a Series of VBD scores (Total Fpts minus positional baseline)."""
+    baselines = _vbd_baselines(df, t)
+    return df.apply(
+        lambda row: round(row["Total Fpts"] - baselines.get(row["Position"], 0.0), 1),
+        axis=1,
+    )
+
+
+# ---------------------------------------------------------------------------
 # Main Streamlit app
 # ---------------------------------------------------------------------------
 
@@ -150,11 +202,15 @@ def main() -> None:
         selected_year = st.sidebar.selectbox("Year", options=year_options, index=0)
         csv_path = available_years[selected_year]
 
-    df = load_data(str(csv_path))
+    df = load_data(str(csv_path)).copy()
 
     if df.empty:
         st.warning("The cleaned CSV contains no data.")
         return
+
+    t = df["Team"].nunique()
+    df["VBD"] = compute_vbd(df, t)
+    df["VBD/g"] = (df["VBD"] / _FANTASY_GAMES_PER_SEASON).round(2)
 
     # -----------------------------------------------------------------------
     # Remaining sidebar filters
@@ -176,7 +232,11 @@ def main() -> None:
         "Team", options=all_teams, default=all_teams
     )
 
-    keeper_only = st.sidebar.checkbox("Keeper picks only", value=False)
+    keeper_filter = st.sidebar.selectbox(
+        "Keepers",
+        options=["All players", "Exclude keepers", "Keepers only"],
+        index=0,
+    )
 
     min_total = float(df["Total Fpts"].min())
     max_total = float(df["Total Fpts"].max())
@@ -221,8 +281,10 @@ def main() -> None:
     )
     filtered = df[mask].copy()
 
-    if keeper_only:
+    if keeper_filter == "Keepers only":
         filtered = filtered[filtered["Keeper"]]
+    elif keeper_filter == "Exclude keepers":
+        filtered = filtered[~filtered["Keeper"]]
 
     if rank_filter.strip():
         filtered = filtered[
@@ -234,10 +296,15 @@ def main() -> None:
     # -----------------------------------------------------------------------
     metric = st.radio(
         "Fantasy points metric",
-        options=["Total Fpts", "Active Fpts"],
+        options=["Total Fpts", "Active Fpts", "VBD"],
         horizontal=True,
     )
-    metric_title = "Total Fantasy Points" if metric == "Total Fpts" else "Active Fantasy Points"
+    metric_titles = {
+        "Total Fpts": "Total Fantasy Points",
+        "Active Fpts": "Active Fantasy Points",
+        "VBD": "Value Based Drafting (VBD)",
+    }
+    metric_title = metric_titles[metric]
 
     if filtered.empty:
         st.info("No picks match the current filters.")
@@ -246,11 +313,21 @@ def main() -> None:
         # Bar chart — Fantasy Points by Pick Number
         # -------------------------------------------------------------------
         st.subheader(f"{metric_title} by Overall Pick Number")
+        # Show "Round N" label only at the first pick of each round; blank otherwise.
+        label_expr = (
+            f"(parseInt(datum.value) - 1) % {t} == 0"
+            f" ? 'Round ' + ceil(parseInt(datum.value) / {t}) : ''"
+        )
         chart_pick = (
             alt.Chart(filtered)
             .mark_bar()
             .encode(
-                x=alt.X("Pick-Num:O", title="Overall Pick #", sort="ascending"),
+                x=alt.X(
+                    "Pick-Num:O",
+                    title="Round",
+                    sort="ascending",
+                    axis=alt.Axis(labelExpr=label_expr),
+                ),
                 y=alt.Y(f"{metric}:Q", title=metric_title),
                 color=alt.Color(
                     "Position:N",
@@ -266,6 +343,7 @@ def main() -> None:
                     alt.Tooltip("Rank:N"),
                     alt.Tooltip("Total Fpts:Q", format=".1f"),
                     alt.Tooltip("Active Fpts:Q", format=".1f"),
+                    alt.Tooltip("VBD:Q", format=".1f"),
                 ],
             )
             .properties(height=420)
@@ -276,13 +354,13 @@ def main() -> None:
         # Bar chart — Fantasy Points by Team
         # -------------------------------------------------------------------
         st.subheader(f"{metric_title} by Team")
-        team_df = (
+        team_totals = (
             filtered.groupby("Team", as_index=False)[metric]
             .sum()
             .sort_values(metric, ascending=False)
         )
         chart_team = (
-            alt.Chart(team_df)
+            alt.Chart(team_totals)
             .mark_bar()
             .encode(
                 x=alt.X("Team:N", sort="-y", title="Team"),
@@ -299,7 +377,7 @@ def main() -> None:
         # -------------------------------------------------------------------
         # Best / Worst pick tables — only when fantasy-points data is present
         # -------------------------------------------------------------------
-        has_fpts = (filtered[metric] > 0).any()
+        has_fpts = (filtered["Total Fpts"] > 0).any()
 
         if has_fpts:
             st.subheader("Best & Worst Pick by Round")
@@ -317,10 +395,12 @@ def main() -> None:
                     "Worst Team": worst["Team"],
                     f"Worst {metric}": round(float(worst[metric]), 1),
                 })
+            round_df = pd.DataFrame(round_rows)
             st.dataframe(
-                pd.DataFrame(round_rows),
+                round_df,
                 use_container_width=True,
                 hide_index=True,
+                height=38 + 35 * len(round_df),
             )
 
             st.subheader("Best & Worst Pick by Team")
@@ -338,10 +418,12 @@ def main() -> None:
                     "Worst Round": int(worst["Round"]),
                     f"Worst {metric}": round(float(worst[metric]), 1),
                 })
+            team_df = pd.DataFrame(team_rows)
             st.dataframe(
-                pd.DataFrame(team_rows),
+                team_df,
                 use_container_width=True,
                 hide_index=True,
+                height=38 + 35 * len(team_df),
             )
 
     # -----------------------------------------------------------------------

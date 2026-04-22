@@ -62,13 +62,18 @@ Interactive dark-themed dashboard for exploring the cleaned draft data.
 
 **Features:**
 - Sidebar year picker to switch between all available seasons
-- Sidebar filters by round, position, keeper status, total/active fantasy points, and rank
-- Bar chart of fantasy points per overall pick number, coloured by position
-- Team totals bar chart with metric toggle (Total Fpts / Active Fpts)
+- Sidebar filters: round, position, team, keeper status (all / exclude / only), total/active fantasy points range, rank substring
+- Metric toggle shared by all charts and tables: Total Fpts, Active Fpts, VBD
+- Bar chart of fantasy points per overall pick number, coloured by position, with x-axis labels grouped by round
+- Team totals bar chart sorted by the selected metric
 - Best & Worst Pick by Round table (only shown when fantasy-points data is present)
 - Best & Worst Pick by Team table (only shown when fantasy-points data is present)
-- Filterable data table
+- Filterable data table with VBD and VBD/g columns
 - Download button to export the current filtered view as CSV
+
+**VBD (Value Based Drafting):**
+
+Each player's VBD = Total Fpts − positional baseline, where the baseline is the Total Fpts of the *t*-th ranked player at that position (*t* = number of teams). RB and WR use ⌊*t* × 1.5⌋ to account for flex roster spots. VBD/g divides VBD by 17 (games per season).
 
 **Usage:**
 
