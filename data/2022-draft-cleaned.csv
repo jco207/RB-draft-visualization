@@ -1,0 +1,181 @@
+Round,Pick,Pick-Num,Team,Player,Position,Keeper,Starred,Elapsed Time,Rank,Total Fpts,Active Fpts
+1,1,1,Prometheus Out of Bounds,Jonathan Taylor,RB,False,False,,,159.4,159.4
+1,2,2,Dude Abides,Christian McCaffrey,RB,False,False,9 sec,,449.6,342.0
+1,3,3,Soaring Marmots,Derrick Henry,RB,False,False,8 sec,,355.8,337.0
+1,4,4,Juggernaut,Cam Akers,RB,False,False,1 min 1 sec,,156.3,127.2
+1,5,5,Mulvihill Machine,Austin Ekeler,RB,False,False,18 sec,,404.0,376.7
+1,6,6,Rumblin' Stumblers,Dalvin Cook,RB,False,False,15 sec,,268.1,252.4
+1,7,7,Pallino Primos,Joe Mixon,RB,False,False,16 sec,,284.8,226.7
+1,8,8,Chicken Dinner,Najee Harris,RB,False,False,23 sec,,228.5,214.5
+1,9,9,Ruff Necks,Alvin Kamara,RB,False,False,7 sec,,221.8,204.8
+1,10,10,Steel Your League,Davante Adams,WR,False,False,41 sec,,379.0,366.7
+1,11,11,OnStar,Patrick Mahomes,QB,False,False,12 sec,,673.5,573.3
+1,12,12,Three-Eyed RAVEN,Stefon Diggs,WR,False,False,48 sec,,382.8,323.5
+2,1,13,Three-Eyed RAVEN,D'Andre Swift,RB,False,False,41 sec,,196.1,130.9
+2,2,14,OnStar,Aaron Jones,RB,False,False,29 sec,,273.6,221.5
+2,3,15,Steel Your League,Nick Chubb,RB,False,False,10 sec,,318.4,295.2
+2,4,16,Ruff Necks,Travis Kelce,TE,False,False,22 sec,,423.0,336.5
+2,5,17,Chicken Dinner,Javonte Williams,RB,False,False,55 sec,,42.1,42.1
+2,6,18,Pallino Primos,Mark Andrews,TE,False,False,36 sec,,217.8,205.5
+2,7,19,Rumblin' Stumblers,Saquon Barkley,RB,False,False,8 sec,,343.6,305.5
+2,8,20,Mulvihill Machine,Tyreek Hill,WR,False,False,36 sec,,405.7,372.0
+2,9,21,Juggernaut,Justin Herbert QB • LAC,QB,True,False,0 sec,,386.1,292.4
+2,10,22,Soaring Marmots,Cooper Kupp WR • SEA,WR,True,False,0 sec,,231.5,231.5
+2,11,23,Dude Abides,Kyle Pitts,TE,False,False,43 sec,,75.6,33.6
+2,12,24,Prometheus Out of Bounds,Tom Brady QB •,QB,False,False,5 sec,,413.2,251.9
+3,1,25,Prometheus Out of Bounds,James Conner,RB,False,False,9 sec,,205.2,183.1
+3,2,26,Dude Abides,Dameon Pierce,RB,False,False,41 sec,,179.4,141.5
+3,3,27,Soaring Marmots,Kyler Murray,QB,False,False,10 sec,,242.2,242.2
+3,4,28,Juggernaut,J.K. Dobbins,RB,False,False,0 sec,,111.7,24.7
+3,5,29,Mulvihill Machine,DJ Moore,WR,False,False,49 sec,,216.4,196.1
+3,6,30,Rumblin' Stumblers,Lamar Jackson,QB,False,False,40 sec,,287.5,287.5
+3,7,31,Pallino Primos,Chris Godwin,WR,False,False,7 sec,,251.3,216.8
+3,8,32,Chicken Dinner,Keenan Allen,WR,False,False,49 sec,,186.1,126.4
+3,9,33,Ruff Necks,A.J. Brown,WR,False,False,17 sec,,361.2,314.1
+3,10,34,Steel Your League,Ezekiel Elliott,RB,False,False,8 sec,,196.4,73.1
+3,11,35,OnStar,Kareem Hunt,RB,False,False,34 sec,,126.9,77.2
+3,12,36,Three-Eyed RAVEN,David Montgomery,RB,False,False,56 sec,,182.7,133.3
+4,1,37,Three-Eyed RAVEN,George Kittle,TE,False,False,52 sec,,234.3,186.6
+4,2,38,OnStar,Darren Waller,TE,False,False,38 sec,,84.8,26.0
+4,3,39,Steel Your League,Allen Robinson,WR,False,False,52 sec,,84.9,17.5
+4,4,40,Ruff Necks,Travis Etienne,RB,False,False,12 sec,,268.2,167.7
+4,5,41,Chicken Dinner,AJ Dillon,RB,False,False,51 sec,,167.6,60.8
+4,6,42,Pallino Primos,Michael Thomas,WR,False,False,7 sec,,51.1,28.4
+4,7,43,Rumblin' Stumblers,Mike Evans WR • SF,WR,True,False,0 sec,,264.8,249.4
+4,8,44,Mulvihill Machine,Breece Hall,RB,False,False,29 sec,,129.1,116.1
+4,9,45,Juggernaut,Kenneth Walker III,RB,False,False,0 sec,,247.8,165.3
+4,10,46,Soaring Marmots,Josh Jacobs,RB,False,False,29 sec,,367.3,345.6
+4,11,47,Dude Abides,Brandin Cooks,WR,False,False,8 sec,,150.6,32.4
+4,12,48,Prometheus Out of Bounds,Jaylen Waddle,WR,False,False,6 sec,,302.4,283.9
+5,1,49,Prometheus Out of Bounds,Michael Pittman WR • PIT,WR,True,False,0 sec,,226.5,117.8
+5,2,50,Dude Abides,Christian Kirk,WR,False,False,8 sec,,299.2,228.5
+5,3,51,Soaring Marmots,Diontae Johnson,WR,False,False,47 sec,,180.7,172.9
+5,4,52,Juggernaut,Damien Harris,RB,False,False,0 sec,,91.2,64.1
+5,5,53,Mulvihill Machine,Jalen Hurts,QB,False,False,20 sec,,542.3,441.3
+5,6,54,Rumblin' Stumblers,Chase Edmonds,RB,False,False,33 sec,,74.2,15.6
+5,7,55,Pallino Primos,Mike Williams WR • LAC,WR,True,False,0 sec,,196.5,159.2
+5,8,56,Chicken Dinner,Tony Pollard,RB,False,False,38 sec,,295.0,209.8
+5,9,57,Ruff Necks,Ja'Marr Chase WR • CIN,WR,True,False,0 sec,,317.9,241.0
+5,10,58,Steel Your League,Joe Burrow,QB,False,False,30 sec,,524.5,449.7
+5,11,59,OnStar,Terry McLaurin,WR,False,False,21 sec,,249.7,233.3
+5,12,60,Three-Eyed RAVEN,Jerry Jeudy,WR,False,False,55 sec,,221.2,129.1
+6,1,61,Three-Eyed RAVEN,Clyde Edwards-Helaire,RB,False,False,45 sec,,98.3,48.0
+6,2,62,OnStar,Dallas Goedert,TE,False,False,33 sec,,182.3,47.3
+6,3,63,Steel Your League,DK Metcalf,WR,False,False,7 sec,,277.4,196.2
+6,4,64,Ruff Necks,Antonio Gibson,RB,False,False,54 sec,,165.9,21.7
+6,5,65,Chicken Dinner,Aaron Rodgers,QB,False,False,48 sec,,297.8,78.5
+6,6,66,Pallino Primos,Matthew Stafford,QB,False,False,11 sec,,131.8,0.0
+6,7,67,Rumblin' Stumblers,Courtland Sutton WR • DEN,WR,True,False,0 sec,,164.4,106.7
+6,8,68,Mulvihill Machine,Dalton Schultz,TE,False,False,21 sec,,184.9,62.8
+6,9,69,Juggernaut,Trevor Lawrence,QB,False,False,0 sec,,427.7,13.2
+6,10,70,Soaring Marmots,T.J. Hockenson,TE,False,False,7 sec,,253.3,196.0
+6,11,71,Dude Abides,Elijah Mitchell,RB,False,False,40 sec,,59.5,4.1
+6,12,72,Prometheus Out of Bounds,Tee Higgins WR • CIN,WR,True,False,0 sec,,278.7,195.1
+7,1,73,Prometheus Out of Bounds,Dawson Knox,TE,False,False,10 sec,,158.2,9.6
+7,2,74,Dude Abides,Amon-Ra St. Brown,WR,False,False,7 sec,,287.6,276.7
+7,3,75,Soaring Marmots,Rams,DST,False,False,5 sec,,207.0,82.1
+7,4,76,Juggernaut,Tyler Allgeier,RB,False,False,1 sec,,171.4,5.1
+7,5,77,Mulvihill Machine,Darnell Mooney,WR,False,False,13 sec,,101.9,24.0
+7,6,78,Rumblin' Stumblers,Bills,DST,False,False,11 sec,,279.5,179.5
+7,7,79,Pallino Primos,Rashaad Penny RB •,RB,False,False,56 sec,,59.2,5.4
+7,8,80,Chicken Dinner,CeeDee Lamb WR • DAL,WR,True,False,0 sec,,371.1,310.8
+7,9,81,Ruff Necks,Russell Wilson,QB,False,False,21 sec,,249.0,86.1
+7,10,82,Steel Your League,Devin Singletary,RB,False,False,46 sec,,199.9,26.7
+7,11,83,OnStar,Miles Sanders,RB,False,False,6 sec,,262.3,212.4
+7,12,84,Three-Eyed RAVEN,Cordarrelle Patterson,RB,False,False,49 sec,,164.7,37.3
+8,1,85,Three-Eyed RAVEN,Josh Allen QB • BUF,QB,True,False,0 sec,,573.8,495.1
+8,2,86,OnStar,Browns,DST,False,True,1 min 2 sec,,214.1,208.1
+8,3,87,Steel Your League,Leonard Fournette RB •,RB,True,False,0 sec,,234.1,193.9
+8,4,88,Ruff Necks,DeAndre Hopkins,WR,False,False,38 sec,,161.7,135.8
+8,5,89,Chicken Dinner,Pat Freiermuth,TE,False,False,46 sec,,148.2,148.2
+8,6,90,Pallino Primos,Allen Lazard,WR,False,False,48 sec,,179.8,29.7
+8,7,91,Rumblin' Stumblers,David Njoku,TE,False,False,42 sec,,142.8,88.3
+8,8,92,Mulvihill Machine,49ers,DST,False,False,27 sec,,369.3,84.8
+8,9,93,Juggernaut,Melvin Gordon RB •,RB,False,False,0 sec,,87.1,64.1
+8,10,94,Soaring Marmots,JuJu Smith-Schuster,WR,False,False,6 sec,,214.2,128.7
+8,11,95,Dude Abides,Rhamondre Stevenson,RB,False,False,9 sec,,261.5,167.8
+8,12,96,Prometheus Out of Bounds,Buccaneers,DST,False,False,5 sec,,227.0,157.0
+9,1,97,Prometheus Out of Bounds,Ryan Succop K •,K,False,False,2 sec,,133.0,91.0
+9,2,98,Dude Abides,Dak Prescott,QB,False,False,11 sec,,325.4,214.5
+9,3,99,Soaring Marmots,Nyheim Miller-Hines,RB,False,False,3 sec,,85.6,8.0
+9,4,100,Juggernaut,Mike Gesicki,TE,False,True,1 sec,,107.7,19.8
+9,5,101,Mulvihill Machine,Gabe Davis,WR,False,False,14 sec,,215.3,149.2
+9,6,102,Rumblin' Stumblers,Tyler Bass,K,False,False,24 sec,,160.0,141.0
+9,7,103,Pallino Primos,James Robinson,RB,False,False,32 sec,,97.6,57.3
+9,8,104,Chicken Dinner,Cole Kmet,TE,False,False,47 sec,,147.3,55.3
+9,9,105,Ruff Necks,Adam Thielen,WR,False,False,60 sec,,188.0,20.4
+9,10,106,Steel Your League,Tyler Higbee,TE,False,False,7 sec,,152.0,92.4
+9,11,107,OnStar,Amari Cooper,WR,False,True,0 sec,,271.0,263.9
+9,12,108,Three-Eyed RAVEN,Hunter Renfrow,WR,False,False,53 sec,,79.0,0.0
+10,1,109,Three-Eyed RAVEN,Drake London,WR,False,False,54 sec,,183.6,20.0
+10,2,110,OnStar,Zach Ertz,TE,False,True,0 sec,,115.6,50.7
+10,3,111,Steel Your League,Deebo Samuel WR • WAS,WR,True,False,0 sec,,225.8,159.7
+10,4,112,Ruff Necks,Tyler Lockett,WR,False,False,21 sec,,262.2,153.9
+10,5,113,Chicken Dinner,Kirk Cousins,QB,False,False,11 sec,,410.7,275.2
+10,6,114,Pallino Primos,Zamir White,RB,False,False,16 sec,,7.9,0.0
+10,7,115,Rumblin' Stumblers,Brandon Aiyuk,WR,False,False,29 sec,,249.7,196.1
+10,8,116,Mulvihill Machine,Darrell Henderson Jr. RB •,RB,False,False,23 sec,,73.5,18.3
+10,9,117,Juggernaut,Colts,DST,False,True,0 sec,,214.1,83.0
+10,10,118,Soaring Marmots,Derek Carr,QB,False,False,5 sec,,289.5,78.2
+10,11,119,Dude Abides,George Pickens,WR,False,False,21 sec,,171.5,38.6
+10,12,120,Prometheus Out of Bounds,DeVonta Smith,WR,False,False,12 sec,,325.3,119.9
+11,1,121,Prometheus Out of Bounds,Elijah Moore,WR,False,False,8 sec,,89.1,7.1
+11,2,122,Dude Abides,Trey Lance QB • LAC,QB,True,False,0 sec,,12.4,2.8
+11,3,123,Soaring Marmots,Robert Woods,WR,False,False,8 sec,,115.7,38.8
+11,4,124,Juggernaut,Marvin Jones WR •,WR,False,True,0 sec,,136.9,76.5
+11,5,125,Mulvihill Machine,Justin Fields,QB,False,False,52 sec,,324.4,113.2
+11,6,126,Rumblin' Stumblers,James Cook,RB,False,False,3 sec,,116.9,0.0
+11,7,127,Pallino Primos,Brian Robinson Jr.,RB,False,False,46 sec,,118.3,57.6
+11,8,128,Chicken Dinner,Isiah Pacheco,RB,False,False,8 sec,,178.2,1.9
+11,9,129,Ruff Necks,Michael Carter,RB,False,False,7 sec,,126.2,10.0
+11,10,130,Steel Your League,Steelers,DST,False,False,6 sec,,234.2,23.2
+11,11,131,OnStar,Ryan Tannehill,QB,False,True,0 sec,,186.9,0.0
+11,12,132,Three-Eyed RAVEN,Marquise Brown WR • PHI,WR,True,False,0 sec,,161.0,101.1
+12,1,133,Three-Eyed RAVEN,Chris Olave,WR,False,False,51 sec,,213.2,141.2
+12,2,134,OnStar,Kenneth Gainwell,RB,False,True,0 sec,,130.7,0.0
+12,3,135,Steel Your League,Raheem Mostert,RB,False,False,51 sec,,179.4,22.2
+12,4,136,Ruff Necks,Ravens,DST,False,False,4 sec,,270.5,190.6
+12,5,137,Chicken Dinner,Justin Jefferson WR • MIN,WR,True,False,0 sec,,435.7,416.2
+12,6,138,Pallino Primos,Michael Gallup,WR,False,False,18 sec,,121.0,27.7
+12,7,139,Rumblin' Stumblers,Nico Collins,WR,False,False,23 sec,,97.1,16.6
+12,8,140,Mulvihill Machine,Evan Engram,TE,False,False,19 sec,,217.3,89.1
+12,9,141,Juggernaut,Sterling Shepard,WR,False,True,0 sec,,36.4,36.4
+12,10,142,Soaring Marmots,Gerald Everett,TE,False,False,4 sec,,167.4,21.0
+12,11,143,Dude Abides,Romeo Doubs,WR,False,False,44 sec,,101.6,2.8
+12,12,144,Prometheus Out of Bounds,Alexander Mattison,RB,False,False,7 sec,,89.7,0.0
+13,1,145,Prometheus Out of Bounds,Darrel Williams RB •,RB,False,False,2 sec,,21.1,0.7
+13,2,146,Dude Abides,Packers,DST,False,False,7 sec,,259.1,93.2
+13,3,147,Soaring Marmots,Julio Jones WR •,WR,False,False,4 sec,,90.8,0.0
+13,4,148,Juggernaut,Chiefs,DST,False,True,0 sec,,276.2,116.8
+13,5,149,Mulvihill Machine,J.D. McKissic RB •,RB,False,False,49 sec,,55.8,0.0
+13,6,150,Rumblin' Stumblers,Skyy Moore,WR,False,False,29 sec,,56.8,0.0
+13,7,151,Pallino Primos,Evan McPherson,K,False,False,39 sec,,158.0,18.0
+13,8,152,Chicken Dinner,Treylon Burks,WR,False,False,6 sec,,99.1,0.0
+13,9,153,Ruff Necks,Isaiah Likely,TE,False,False,9 sec,,96.3,9.4
+13,10,154,Steel Your League,Austin Hooper,TE,False,False,21 sec,,97.4,1.6
+13,11,155,OnStar,Jamaal Williams,RB,False,False,35 sec,,238.9,112.5
+13,12,156,Three-Eyed RAVEN,Rondale Moore,WR,False,False,44 sec,,89.6,44.2
+14,1,157,Three-Eyed RAVEN,Saints,DST,False,False,60 sec,,216.0,12.0
+14,2,158,OnStar,Justin Tucker,K,False,False,10 sec,,181.0,164.0
+14,3,159,Steel Your League,Harrison Butker,K,False,False,6 sec,,139.0,65.0
+14,4,160,Ruff Necks,Rashod Bateman WR • BAL,WR,True,False,0 sec,,63.5,5.9
+14,5,161,Chicken Dinner,Chargers,DST,False,False,29 sec,,244.1,25.2
+14,6,162,Pallino Primos,Broncos,DST,False,False,8 sec,,230.5,10.0
+14,7,163,Rumblin' Stumblers,Chase Claypool,WR,False,False,31 sec,,107.0,0.0
+14,8,164,Mulvihill Machine,Matt Gay,K,False,False,5 sec,,148.0,44.0
+14,9,165,Juggernaut,Noah Fant,TE,False,True,0 sec,,124.7,83.8
+14,10,166,Soaring Marmots,Daniel Carlson,K,False,False,24 sec,,177.0,68.0
+14,11,167,Dude Abides,Greg Joseph,K,False,False,34 sec,,145.0,42.0
+14,12,168,Prometheus Out of Bounds,Tua Tagovailoa,QB,False,False,7 sec,,334.4,166.8
+15,1,169,Prometheus Out of Bounds,Chuba Hubbard,RB,False,False,3 sec (1 min 16 sec),,92.7,0.0
+15,2,170,Dude Abides,Tyrion Davis-Price,RB,False,False,12 sec (4 min 54 sec),,9.9,0.0
+15,3,171,Soaring Marmots,Isaiah McKenzie,WR,False,False,16 sec (2 min 56 sec),,122.8,0.0
+15,4,172,Juggernaut,Rodrigo Blankenship K •,K,False,True,1 sec (1 min 4 sec),,19.0,9.0
+15,5,173,Mulvihill Machine,Rachaad White,RB,False,False,12 sec (6 min 27 sec),,155.8,104.5
+15,6,174,Rumblin' Stumblers,Dolphins,DST,False,False,20 sec (5 min 8 sec),,241.3,5.0
+15,7,175,Pallino Primos,Kenny Golladay WR •,WR,False,False,8 sec (5 min 48 sec),,20.1,4.2
+15,8,176,Chicken Dinner,Dustin Hopkins,K,False,False,23 sec (7 min 14 sec),,40.0,13.0
+15,9,177,Ruff Necks,Jake Elliott,K,False,False,14 sec (4 min 46 sec),,149.0,105.0
+15,10,178,Steel Your League,Cowboys,DST,False,False,6 sec (4 min 51 sec),,316.0,226.9
+15,11,179,OnStar,Rex Burkhead RB •,RB,False,False,40 sec (5 min 20 sec),,77.7,0.0
+15,12,180,Three-Eyed RAVEN,Robbie Gould K •,K,False,True,0 sec (10 min 8 sec),,175.0,25.0

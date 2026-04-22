@@ -247,11 +247,20 @@ def _parse_format_a(input_path: Path) -> tuple:
 
 
 def _parse_format_b(input_path: Path) -> tuple:
-    """Parse Format B: flat pre-cleaned CSV with Round, Pick, Team, Player, Position columns."""
+    """Parse Format B: flat CSV with Round, Pick, Team, Player, Position columns.
+
+    Optional columns read when present: Elapsed Time, Total Fpts, Active Fpts.
+    """
     warnings: list = []
     rows: list = []
 
     df_raw = pd.read_csv(input_path, dtype=str)
+    has_elapsed = "Elapsed Time" in df_raw.columns
+    has_fpts = "Total Fpts" in df_raw.columns and "Active Fpts" in df_raw.columns
+
+    def _col(raw, col):
+        val = raw.get(col, "")
+        return "" if pd.isna(val) else str(val).strip()
 
     for _, raw in df_raw.iterrows():
         current_round = int(raw["Round"])
@@ -266,6 +275,11 @@ def _parse_format_b(input_path: Path) -> tuple:
         player_clean = clean_player_name(player_raw)
         pick_num = (current_round - 1) * PICKS_PER_ROUND + pick
 
+        elapsed = _col(raw, "Elapsed Time") if has_elapsed else float("nan")
+        label = f"Round {current_round} Pick {pick}"
+        total_fpts = _safe_float(_col(raw, "Total Fpts"), f"{label} Total Fpts", warnings) if has_fpts else float("nan")
+        active_fpts = _safe_float(_col(raw, "Active Fpts"), f"{label} Active Fpts", warnings) if has_fpts else float("nan")
+
         rows.append({
             "Round": current_round,
             "Pick": pick,
@@ -275,10 +289,10 @@ def _parse_format_b(input_path: Path) -> tuple:
             "Position": position,
             "Keeper": keeper,
             "Starred": starred,
-            "Elapsed Time": float("nan"),
+            "Elapsed Time": elapsed,
             "Rank": float("nan"),
-            "Total Fpts": float("nan"),
-            "Active Fpts": float("nan"),
+            "Total Fpts": total_fpts,
+            "Active Fpts": active_fpts,
         })
 
     return rows, warnings

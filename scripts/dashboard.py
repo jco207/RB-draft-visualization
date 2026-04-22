@@ -84,6 +84,18 @@ def _find_cleaned_csv(data_arg: Optional[str]) -> Optional[Path]:
     return candidates[-1] if candidates else None
 
 
+def _get_available_years() -> dict:
+    """Return a dict mapping year string to Path for each cleaned CSV in the data directory."""
+    project_root = Path(__file__).parent.parent
+    candidates = sorted((project_root / "data").glob("*-cleaned.csv"))
+    years = {}
+    for path in candidates:
+        year = path.name[:4]
+        if year.isdigit():
+            years[year] = path
+    return years
+
+
 @st.cache_data
 def load_data(csv_path: str) -> pd.DataFrame:
     """Load and cache the cleaned draft CSV from *csv_path*, with correct dtypes."""
@@ -115,18 +127,28 @@ def main() -> None:
 
     st.title("Fantasy Football Draft Dashboard")
 
-    # Resolve data path
-    csv_path = _find_cleaned_csv(_CLI_ARGS.data)
+    st.sidebar.header("Filters")
 
-    if csv_path is None or not csv_path.exists():
-        st.error(
-            "Cleaned draft CSV not found. "
-            "Run the cleaner first:\n\n"
-            "```\n"
-            "python scripts/clean_draft.py data/2025_Pre-season_Pre-season.csv\n"
-            "```"
-        )
-        return
+    # Resolve data path — CLI flag takes precedence; otherwise use year picker
+    if _CLI_ARGS.data:
+        csv_path = _find_cleaned_csv(_CLI_ARGS.data)
+        if csv_path is None or not csv_path.exists():
+            st.error(f"Cleaned draft CSV not found: {_CLI_ARGS.data}")
+            return
+    else:
+        available_years = _get_available_years()
+        if not available_years:
+            st.error(
+                "Cleaned draft CSV not found. "
+                "Run the cleaner first:\n\n"
+                "```\n"
+                "python scripts/clean_draft.py data/2025_Pre-season_Pre-season.csv\n"
+                "```"
+            )
+            return
+        year_options = sorted(available_years.keys(), reverse=True)
+        selected_year = st.sidebar.selectbox("Year", options=year_options, index=0)
+        csv_path = available_years[selected_year]
 
     df = load_data(str(csv_path))
 
@@ -135,9 +157,8 @@ def main() -> None:
         return
 
     # -----------------------------------------------------------------------
-    # Sidebar filters
+    # Remaining sidebar filters
     # -----------------------------------------------------------------------
-    st.sidebar.header("Filters")
 
     all_rounds = sorted(df["Round"].unique().tolist())
     selected_rounds = st.sidebar.multiselect(
