@@ -4,16 +4,26 @@ dashboard.py — Fantasy Football Draft Dashboard (Streamlit)
 
 Interactive dashboard for exploring a cleaned fantasy draft CSV. Provides
 sidebar filters, charts, VBD analysis, best/worst pick tables, a data table,
-and a CSV download button.
+a CSV download button, and a per-team roster breakdown.
 
-Sidebar filters: year, round, position, team, keeper status, total/active
-fantasy points range, and rank substring.
+Sidebar filters: year, round, position, team, keeper status (all / exclude /
+only), roster view (Entire Team / Starters / Bench), total/active fantasy
+points range, and rank substring.
 
 Metric toggle (shared by all charts and tables): Total Fpts, Active Fpts, VBD.
 
 VBD (Value Based Drafting): each player's Total Fpts minus the positional
 baseline for a league of t teams. Baseline = t-th ranked player at the
 position (floor(t * 1.5)-th for RB and WR). VBD/g = VBD / 17 games.
+
+Roster classification (Starter / Bench): computed per team on the full
+unfiltered dataset. Starters = best player at each non-RB/WR position + top-2
+RBs + top-2 WRs + one FLEX (highest Total Fpts RB or WR not already a
+starter). Everyone else is Bench.
+
+Team Roster table: shown below the draft picks table. Always reflects the full
+season roster regardless of other sidebar filters. Starters are listed first
+(QB → RB → WR → TE → K → DST), followed by bench players in the same order.
 
 Run with Streamlit (required):
     streamlit run scripts/dashboard.py
@@ -123,6 +133,46 @@ def load_data(csv_path: str) -> pd.DataFrame:
 
 
 # ---------------------------------------------------------------------------
+# Roster roles (Starter / Bench)
+# ---------------------------------------------------------------------------
+
+_POS_ORDER = ["QB", "RB", "WR", "TE", "K", "DST"]
+
+
+def _pos_sort_key(pos: str) -> int:
+    try:
+        return _POS_ORDER.index(pos)
+    except ValueError:
+        return len(_POS_ORDER)
+
+
+def compute_roster_roles(df: pd.DataFrame) -> pd.Series:
+    """Return a Series of 'Starter' or 'Bench' for each row based on team rosters.
+
+    Starters: best player at each non-RB/WR position, top-2 RBs, top-2 WRs,
+    plus one FLEX (highest Total Fpts RB or WR not already a starter).
+    """
+    roles = pd.Series("Bench", index=df.index, dtype=str)
+    for team, team_df in df.groupby("Team"):
+        if not team:
+            continue
+        starter_indices: set = set()
+        for pos, pos_df in team_df.groupby("Position"):
+            if not pos:
+                continue
+            n = 2 if pos in ("RB", "WR") else 1
+            starter_indices.update(pos_df.nlargest(n, "Total Fpts").index)
+        flex_pool = team_df[
+            team_df["Position"].isin(("RB", "WR"))
+            & ~team_df.index.isin(starter_indices)
+        ]
+        if not flex_pool.empty:
+            starter_indices.add(flex_pool["Total Fpts"].idxmax())
+        roles.loc[list(starter_indices)] = "Starter"
+    return roles
+
+
+# ---------------------------------------------------------------------------
 # VBD (Value Based Drafting)
 # ---------------------------------------------------------------------------
 
@@ -211,6 +261,7 @@ def main() -> None:
     t = df["Team"].nunique()
     df["VBD"] = compute_vbd(df, t)
     df["VBD/g"] = (df["VBD"] / _FANTASY_GAMES_PER_SEASON).round(2)
+    df["Roster"] = compute_roster_roles(df)
 
     # -----------------------------------------------------------------------
     # Remaining sidebar filters
@@ -235,6 +286,12 @@ def main() -> None:
     keeper_filter = st.sidebar.selectbox(
         "Keepers",
         options=["All players", "Exclude keepers", "Keepers only"],
+        index=0,
+    )
+
+    roster_filter = st.sidebar.selectbox(
+        "Roster",
+        options=["Entire Team", "Starters", "Bench"],
         index=0,
     )
 
@@ -285,6 +342,11 @@ def main() -> None:
         filtered = filtered[filtered["Keeper"]]
     elif keeper_filter == "Exclude keepers":
         filtered = filtered[~filtered["Keeper"]]
+
+    if roster_filter == "Starters":
+        filtered = filtered[filtered["Roster"] == "Starter"]
+    elif roster_filter == "Bench":
+        filtered = filtered[filtered["Roster"] == "Bench"]
 
     if rank_filter.strip():
         filtered = filtered[
@@ -427,10 +489,14 @@ def main() -> None:
             )
 
     # -----------------------------------------------------------------------
-    # Data table
+    # Data table — "Roster" is an internal classification column; omit it here
+    # so the display stays clean (it is still included in the CSV download).
     # -----------------------------------------------------------------------
     st.subheader(f"Draft Picks  ({len(filtered):,} shown of {len(df):,})")
-    st.dataframe(filtered.reset_index(drop=True), use_container_width=True)
+    st.dataframe(
+        filtered.drop(columns="Roster").reset_index(drop=True),
+        use_container_width=True,
+    )
 
     # -----------------------------------------------------------------------
     # Download button
@@ -442,6 +508,40 @@ def main() -> None:
         file_name="draft_filtered.csv",
         mime="text/csv",
     )
+
+    # -----------------------------------------------------------------------
+    # Team roster breakdown — always uses the full unfiltered df so the
+    # lineup reflects the true roster regardless of sidebar filters.
+    # -----------------------------------------------------------------------
+    st.subheader("Team Roster (full season, unfiltered)")
+    roster_teams = sorted(df["Team"].unique().tolist())
+    if roster_teams:
+        selected_roster_team = st.selectbox(
+            "Select team", options=roster_teams, key="roster_team_select"
+        )
+        team_roster = df[df["Team"] == selected_roster_team].copy()
+
+        starters = team_roster[team_roster["Roster"] == "Starter"].copy()
+        bench = team_roster[team_roster["Roster"] == "Bench"].copy()
+
+        starters["_pos_order"] = starters["Position"].apply(_pos_sort_key)
+        bench["_pos_order"] = bench["Position"].apply(_pos_sort_key)
+
+        starters = starters.sort_values("_pos_order").drop(columns="_pos_order")
+        bench = bench.sort_values("_pos_order").drop(columns="_pos_order")
+
+        roster_display_cols = [
+            "Roster", "Position", "Player", "Round", "Pick",
+            "Total Fpts", "Active Fpts", "VBD",
+        ]
+        roster_table = pd.concat([starters, bench])[roster_display_cols].reset_index(drop=True)
+
+        st.dataframe(
+            roster_table,
+            use_container_width=True,
+            hide_index=True,
+            height=38 + 35 * len(roster_table),
+        )
 
 
 main()

@@ -161,3 +161,137 @@ def step_set_one_team(app):
     widget.set_value([one_team])
     app.run()
     return app
+
+
+# ---------------------------------------------------------------------------
+# VBD metric steps
+# ---------------------------------------------------------------------------
+
+def _metric_radio(app):
+    """Return the Fantasy points metric radio widget."""
+    assert len(app.radio) >= 1, (
+        f"Expected at least 1 radio widget, found {len(app.radio)}"
+    )
+    return app.radio[0]
+
+
+@then("the metric radio button includes VBD as an option")
+def step_vbd_in_radio(app) -> None:
+    widget = _metric_radio(app)
+    assert "VBD" in widget.options, (
+        f"VBD not in metric radio options: {widget.options}"
+    )
+
+
+@when("the metric is set to VBD", target_fixture="app")
+def step_set_metric_vbd(app):
+    _metric_radio(app).set_value("VBD")
+    app.run()
+    return app
+
+
+# ---------------------------------------------------------------------------
+# Keeper selectbox steps
+# Sidebar order: selectbox[0]=Year, selectbox[1]=Keepers, selectbox[2]=Roster
+# ---------------------------------------------------------------------------
+
+def _keeper_selectbox(app):
+    selectboxes = app.sidebar.selectbox
+    assert len(selectboxes) >= 2, (
+        f"Expected at least 2 sidebar selectboxes (Year, Keepers), "
+        f"found {len(selectboxes)}"
+    )
+    return selectboxes[1]
+
+
+@then("a keeper selectbox is present in the sidebar")
+def step_keeper_selectbox_present(app) -> None:
+    widget = _keeper_selectbox(app)
+    assert len(widget.options) > 0, "Keeper selectbox has no options"
+
+
+@then("the keeper selectbox has options for all players, exclude keepers, and keepers only")
+def step_keeper_selectbox_options(app) -> None:
+    widget = _keeper_selectbox(app)
+    expected = {"All players", "Exclude keepers", "Keepers only"}
+    assert expected.issubset(set(widget.options)), (
+        f"Keeper selectbox missing options. Expected {expected}, got {widget.options}"
+    )
+
+
+@when("the keeper filter is set to keepers only", target_fixture="app")
+def step_set_keeper_filter(app):
+    _keeper_selectbox(app).set_value("Keepers only")
+    app.run()
+    return app
+
+
+# ---------------------------------------------------------------------------
+# Roster filter steps
+# Sidebar order: selectbox[0]=Year, selectbox[1]=Keepers, selectbox[2]=Roster
+# ---------------------------------------------------------------------------
+
+def _roster_selectbox(app):
+    selectboxes = app.sidebar.selectbox
+    assert len(selectboxes) >= 3, (
+        f"Expected at least 3 sidebar selectboxes (Year, Keepers, Roster), "
+        f"found {len(selectboxes)}"
+    )
+    return selectboxes[2]
+
+
+@then("a roster filter selectbox is present in the sidebar")
+def step_roster_selectbox_present(app) -> None:
+    widget = _roster_selectbox(app)
+    assert len(widget.options) > 0, "Roster filter selectbox has no options"
+
+
+@then("the roster filter value is Entire Team")
+def step_roster_filter_default(app) -> None:
+    widget = _roster_selectbox(app)
+    assert widget.value == "Entire Team", (
+        f"Roster filter default expected 'Entire Team', got '{widget.value}'"
+    )
+
+
+@when("the roster filter is set to Starters", target_fixture="app")
+def step_set_roster_starters(app):
+    _roster_selectbox(app).set_value("Starters")
+    app.run()
+    return app
+
+
+@when("the roster filter is set to Bench", target_fixture="app")
+def step_set_roster_bench(app):
+    _roster_selectbox(app).set_value("Bench")
+    app.run()
+    return app
+
+
+# ---------------------------------------------------------------------------
+# Team Roster table steps
+# The "Select team" selectbox lives in the main area (not sidebar).
+# app.selectbox includes ALL selectboxes; sidebar ones come first.
+# ---------------------------------------------------------------------------
+
+@then("a team roster selectbox is present in the main area")
+def step_team_roster_selectbox_present(app) -> None:
+    sidebar_count = len(app.sidebar.selectbox)
+    all_count = len(app.selectbox)
+    assert all_count > sidebar_count, (
+        f"Expected at least one main-area selectbox (Team Roster selector), "
+        f"but all={all_count} and sidebar={sidebar_count}"
+    )
+
+
+@then("switching to Starters reduces the visible pick count")
+def step_starters_reduce_count(app) -> None:
+    # Sum rows across all dataframes rendered in the default (Entire Team) view.
+    before = sum(len(el.value) for el in app.dataframe)
+    _roster_selectbox(app).set_value("Starters")
+    app.run()
+    after = sum(len(el.value) for el in app.dataframe)
+    assert after < before, (
+        f"Expected fewer total rows with Starters filter: "
+        f"before={before}, after={after}"
+    )

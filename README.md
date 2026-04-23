@@ -62,18 +62,23 @@ Interactive dark-themed dashboard for exploring the cleaned draft data.
 
 **Features:**
 - Sidebar year picker to switch between all available seasons
-- Sidebar filters: round, position, team, keeper status (all / exclude / only), total/active fantasy points range, rank substring
+- Sidebar filters: round, position, team, keeper status (all / exclude / only), roster view (Entire Team / Starters / Bench), total/active fantasy points range, rank substring
 - Metric toggle shared by all charts and tables: Total Fpts, Active Fpts, VBD
 - Bar chart of fantasy points per overall pick number, coloured by position, with x-axis labels grouped by round
 - Team totals bar chart sorted by the selected metric
 - Best & Worst Pick by Round table (only shown when fantasy-points data is present)
 - Best & Worst Pick by Team table (only shown when fantasy-points data is present)
 - Filterable data table with VBD and VBD/g columns
-- Download button to export the current filtered view as CSV
+- Download button to export the current filtered view as CSV (includes Roster classification column)
+- Team Roster table with a team selector showing starters first (QB → RB → WR → TE → K → DST), then bench — always reflects the full season roster regardless of sidebar filters
 
 **VBD (Value Based Drafting):**
 
 Each player's VBD = Total Fpts − positional baseline, where the baseline is the Total Fpts of the *t*-th ranked player at that position (*t* = number of teams). RB and WR use ⌊*t* × 1.5⌋ to account for flex roster spots. VBD/g divides VBD by 17 (games per season).
+
+**Roster Classification (Starter / Bench):**
+
+Computed per team on the full unfiltered dataset. Starters = best player at each non-RB/WR position + top-2 RBs + top-2 WRs + one FLEX (highest Total Fpts RB or WR not already starting). All remaining players are Bench. The Roster sidebar filter applies this classification to the draft picks table; the Team Roster table at the bottom always shows all players unfiltered.
 
 **Usage:**
 
@@ -114,13 +119,14 @@ source venv/bin/activate
 pytest tests/
 ```
 
-Feature files and what they cover:
+Feature files and step definitions:
 
 | File | Covers |
 |------|--------|
 | `tests/features/clean_draft.feature` | Column presence, Pick-Num formula, separator/header row removal, keeper/position/asterisk extraction (Format A / 2025) |
 | `tests/features/clean_draft_formats.feature` | Multi-format support: output schema, NaN columns, Pick-Num, position, and asterisk handling for Format B (2021) and Format C (2020) |
-| `tests/features/dashboard.feature` | App load, widget rendering, download button, `--help` flag, slider safety, position filter completeness |
+| `tests/features/dashboard.feature` | App load, widget rendering, download button, `--help` flag, slider safety, position filter completeness, VBD radio, keeper selectbox, roster filter (presence, default, Starters/Bench filtering, row-count reduction), team roster selectbox |
+| `tests/step_defs/test_dashboard_functions.py` | Plain pytest unit tests for `compute_vbd` (baseline math, flex multiplier, clamping) and `compute_roster_roles` (starter/bench assignment, flex selection, edge cases: empty position rows, teams with no RBs/WRs) |
 
 To add a test for a new defect: add a `Scenario:` to the relevant `.feature` file, verify it fails, fix the code, then verify it passes. See `.claude/skills/draft-visualization.md` for the full coding standards.
 
@@ -160,7 +166,8 @@ To add a test for a new defect: add a `Scenario:` to the relevant `.feature` fil
 │   └── step_defs/
 │       ├── test_clean_draft.py
 │       ├── test_clean_draft_formats.py
-│       └── test_dashboard.py
+│       ├── test_dashboard.py
+│       └── test_dashboard_functions.py  # plain pytest unit tests (compute_vbd, compute_roster_roles)
 └── .claude/
     └── skills/
         └── draft-visualization.md         # Project coding standards
