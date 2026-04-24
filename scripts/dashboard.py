@@ -101,6 +101,8 @@ def _find_cleaned_csv(data_arg: Optional[str]) -> Optional[Path]:
         return Path(data_arg)
     project_root = Path(__file__).parent.parent
     candidates = sorted((project_root / "data").glob("*-cleaned.csv"))
+    # Pick the lexicographically last file — since filenames start with the
+    # four-digit year (e.g. "2024-cleaned.csv"), this is always the most recent.
     return candidates[-1] if candidates else None
 
 
@@ -110,6 +112,8 @@ def _get_available_years() -> dict:
     candidates = sorted((project_root / "data").glob("*-cleaned.csv"))
     years = {}
     for path in candidates:
+        # All cleaned filenames follow the "<YYYY>-*-cleaned.csv" convention,
+        # so the first four characters are always the draft year.
         year = path.name[:4]
         if year.isdigit():
             years[year] = path
@@ -120,12 +124,18 @@ def _get_available_years() -> dict:
 def load_data(csv_path: str) -> pd.DataFrame:
     """Load and cache the cleaned draft CSV from *csv_path*, with correct dtypes."""
     df = pd.read_csv(csv_path)
+    # Coerce numeric columns explicitly — pandas sometimes infers them as object
+    # when NaN is present in older cleaned CSVs.
     df["Round"] = df["Round"].astype(int)
     df["Pick"] = df["Pick"].astype(int)
     df["Pick-Num"] = df["Pick-Num"].astype(int)
+    # errors="coerce" turns unparseable strings into NaN; fillna(0.0) keeps the
+    # slider range valid even when a format has no fpts data.
     df["Total Fpts"] = pd.to_numeric(df["Total Fpts"], errors="coerce").fillna(0.0)
     df["Active Fpts"] = pd.to_numeric(df["Active Fpts"], errors="coerce").fillna(0.0)
     df["Keeper"] = df["Keeper"].astype(bool)
+    # Empty strings are more filter-friendly than NaN for string columns because
+    # .isin() and .str.contains() handle them without extra na= guards.
     df["Position"] = df["Position"].fillna("").astype(str)
     df["Team"] = df["Team"].fillna("").astype(str)
     df["Rank"] = df["Rank"].fillna("").astype(str)
@@ -140,6 +150,11 @@ _POS_ORDER = ["QB", "RB", "WR", "TE", "K", "DST"]
 
 
 def _pos_sort_key(pos: str) -> int:
+    """Return the display sort index for a position string.
+
+    Positions in _POS_ORDER are sorted QB → RB → WR → TE → K → DST.
+    Unrecognised positions (e.g. empty string for skipped picks) sort last.
+    """
     try:
         return _POS_ORDER.index(pos)
     except ValueError:
@@ -152,22 +167,29 @@ def compute_roster_roles(df: pd.DataFrame) -> pd.Series:
     Starters: best player at each non-RB/WR position, top-2 RBs, top-2 WRs,
     plus one FLEX (highest Total Fpts RB or WR not already a starter).
     """
+    # Default every player to Bench; we'll flip confirmed starters below.
     roles = pd.Series("Bench", index=df.index, dtype=str)
     for team, team_df in df.groupby("Team"):
         if not team:
-            continue
+            continue  # skip rows with a blank team name (e.g. skipped picks)
         starter_indices: set = set()
+
         for pos, pos_df in team_df.groupby("Position"):
             if not pos:
-                continue
+                continue  # skip rows whose position could not be determined
+            # Start 2 at RB and WR to account for the two flex-eligible spots;
+            # all other positions get exactly 1 starter slot.
             n = 2 if pos in ("RB", "WR") else 1
             starter_indices.update(pos_df.nlargest(n, "Total Fpts").index)
+
+        # FLEX spot: best remaining RB or WR (not already a positional starter).
         flex_pool = team_df[
             team_df["Position"].isin(("RB", "WR"))
             & ~team_df.index.isin(starter_indices)
         ]
         if not flex_pool.empty:
             starter_indices.add(flex_pool["Total Fpts"].idxmax())
+
         roles.loc[list(starter_indices)] = "Starter"
     return roles
 
@@ -192,21 +214,33 @@ def _vbd_baselines(df: pd.DataFrame, t: int) -> dict:
     baselines: dict = {}
     for pos, pos_df in df.groupby("Position"):
         if not pos:
-            continue
+            continue  # skip rows without a recognised position
+
+        # RB and WR are eligible for the FLEX spot, so roughly 1.5× as many
+        # league teams will start them.  All other positions use a 1-to-1 ratio.
         multiplier = 1.5 if pos in _VBD_FLEX_POSITIONS else 1.0
         rank = math.floor(t * multiplier)
+
+        # Sort all players at this position by Total Fpts (best first), then
+        # grab the player at the computed rank threshold (converting to 0-indexed).
         sorted_fpts = (
             pos_df["Total Fpts"]
             .sort_values(ascending=False)
             .reset_index(drop=True)
         )
+        # Clamp to the last player if the pool is smaller than the threshold —
+        # prevents an IndexError when a position has very few players.
         idx = min(rank - 1, len(sorted_fpts) - 1)
         baselines[pos] = float(sorted_fpts.iloc[idx])
     return baselines
 
 
 def compute_vbd(df: pd.DataFrame, t: int) -> pd.Series:
-    """Return a Series of VBD scores (Total Fpts minus positional baseline)."""
+    """Return a Series of VBD scores (Total Fpts minus positional baseline).
+
+    A positive VBD means the player outscored the last starter at their
+    position; negative means they were below that baseline.
+    """
     baselines = _vbd_baselines(df, t)
     return df.apply(
         lambda row: round(row["Total Fpts"] - baselines.get(row["Position"], 0.0), 1),
@@ -258,8 +292,11 @@ def main() -> None:
         st.warning("The cleaned CSV contains no data.")
         return
 
+    # t = number of teams in the league; used as the VBD baseline rank threshold
+    # and as the round-grouping denominator in the pick-number chart labels.
     t = df["Team"].nunique()
     df["VBD"] = compute_vbd(df, t)
+    # VBD per game normalises across seasons that had a different number of weeks.
     df["VBD/g"] = (df["VBD"] / _FANTASY_GAMES_PER_SEASON).round(2)
     df["Roster"] = compute_roster_roles(df)
 
@@ -297,7 +334,8 @@ def main() -> None:
 
     min_total = float(df["Total Fpts"].min())
     max_total = float(df["Total Fpts"].max())
-    # Guard against min == max, which Streamlit's slider does not allow
+    # Streamlit's range slider raises an error when min == max (e.g. a dataset
+    # where every player scored 0 points).  Adding 1.0 gives it a valid range.
     if min_total == max_total:
         max_total = min_total + 1.0
     total_range = st.sidebar.slider(
@@ -327,7 +365,8 @@ def main() -> None:
     )
 
     # -----------------------------------------------------------------------
-    # Apply filters
+    # Apply filters — build a boolean mask from all sidebar selections so we
+    # only scan the DataFrame once rather than chaining multiple .loc[] calls.
     # -----------------------------------------------------------------------
     mask = (
         df["Round"].isin(selected_rounds)
@@ -375,7 +414,9 @@ def main() -> None:
         # Bar chart — Fantasy Points by Pick Number
         # -------------------------------------------------------------------
         st.subheader(f"{metric_title} by Overall Pick Number")
-        # Show "Round N" label only at the first pick of each round; blank otherwise.
+        # Vega-Lite label expression: show "Round N" text only for the first
+        # pick of each round (pick numbers 1, 13, 25, …) to avoid cluttering
+        # the x-axis.  All other tick labels are left blank.
         label_expr = (
             f"(parseInt(datum.value) - 1) % {t} == 0"
             f" ? 'Round ' + ceil(parseInt(datum.value) / {t}) : ''"

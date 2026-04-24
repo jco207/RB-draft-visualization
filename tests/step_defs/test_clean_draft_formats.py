@@ -18,10 +18,12 @@ PROJECT_ROOT = Path(__file__).parent.parent.parent
 RAW_CSV_2021 = PROJECT_ROOT / "data" / "2021_Ballers_draft.csv"
 RAW_CSV_2020 = PROJECT_ROOT / "data" / "2020_Ballers_draft.csv"
 
+# The 12 columns that every cleaned CSV must contain, regardless of source format.
 EXPECTED_COLUMNS = [
     "Round", "Pick", "Pick-Num", "Team", "Player", "Position",
     "Keeper", "Starred", "Elapsed Time", "Rank", "Total Fpts", "Active Fpts",
 ]
+# Empty string is included because skipped-pick rows have no extractable position.
 VALID_POSITIONS = {"QB", "RB", "WR", "TE", "K", "DEF", "DST", ""}
 
 
@@ -40,7 +42,10 @@ def step_2020_csv_exists() -> None:
 
 
 # ---------------------------------------------------------------------------
-# When steps (trigger fixture evaluation)
+# When steps
+# Requesting the session fixture as a parameter is what actually triggers the
+# cleaner script to run (once per session).  The assert just confirms the
+# output file was created so we get a clear error message if it wasn't.
 # ---------------------------------------------------------------------------
 
 @when("the cleaning script is run on the 2021 CSV")
@@ -69,6 +74,8 @@ def df_2020(cleaned_df_2020: pd.DataFrame) -> pd.DataFrame:
 
 # ---------------------------------------------------------------------------
 # Then steps — 2021 (Format B)
+# Format B is a flat CSV that lacks Rank, Total Fpts, and Active Fpts columns.
+# The cleaner writes NaN for those columns to keep the output schema uniform.
 # ---------------------------------------------------------------------------
 
 @then("the 2021 cleaned CSV contains all 12 expected columns")
@@ -79,16 +86,19 @@ def step_2021_columns(df_2021: pd.DataFrame) -> None:
 
 @then("the 2021 cleaned CSV has empty Rank values")
 def step_2021_rank_empty(df_2021: pd.DataFrame) -> None:
+    # Format B raw files do not include a Rank column — all values should be NaN.
     assert df_2021["Rank"].isna().all(), "Expected all Rank values to be NaN for Format B"
 
 
 @then("the 2021 cleaned CSV has empty Total Fpts values")
 def step_2021_total_fpts_empty(df_2021: pd.DataFrame) -> None:
+    # Format B does not export fantasy point totals — all values should be NaN.
     assert df_2021["Total Fpts"].isna().all(), "Expected all Total Fpts to be NaN for Format B"
 
 
 @then("the 2021 cleaned CSV has empty Active Fpts values")
 def step_2021_active_fpts_empty(df_2021: pd.DataFrame) -> None:
+    # Format B does not export active fantasy point totals — all values should be NaN.
     assert df_2021["Active Fpts"].isna().all(), "Expected all Active Fpts to be NaN for Format B"
 
 
@@ -115,6 +125,8 @@ def step_2021_no_asterisk(df_2021: pd.DataFrame) -> None:
 
 # ---------------------------------------------------------------------------
 # Then steps — 2020 (Format C)
+# Format C is similar to Format A (alternating Round N headers) but has only
+# 5 columns (no Rank or Fpts).  Like Format B, those columns become NaN.
 # ---------------------------------------------------------------------------
 
 @then("the 2020 cleaned CSV contains all 12 expected columns")
@@ -125,16 +137,19 @@ def step_2020_columns(df_2020: pd.DataFrame) -> None:
 
 @then("the 2020 cleaned CSV has empty Rank values")
 def step_2020_rank_empty(df_2020: pd.DataFrame) -> None:
+    # Format C raw files do not include a Rank column — all values should be NaN.
     assert df_2020["Rank"].isna().all(), "Expected all Rank values to be NaN for Format C"
 
 
 @then("the 2020 cleaned CSV has empty Total Fpts values")
 def step_2020_total_fpts_empty(df_2020: pd.DataFrame) -> None:
+    # Format C does not export fantasy point totals — all values should be NaN.
     assert df_2020["Total Fpts"].isna().all(), "Expected all Total Fpts to be NaN for Format C"
 
 
 @then("the 2020 cleaned CSV has empty Active Fpts values")
 def step_2020_active_fpts_empty(df_2020: pd.DataFrame) -> None:
+    # Format C does not export active fantasy point totals — all values should be NaN.
     assert df_2020["Active Fpts"].isna().all(), "Expected all Active Fpts to be NaN for Format C"
 
 

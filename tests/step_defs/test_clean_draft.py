@@ -29,7 +29,8 @@ EXPECTED_COLUMNS = [
 # ---------------------------------------------------------------------------
 # Background steps
 # The conftest.py session fixtures (cleaned_csv_path, raw_csv_path) provide
-# the real data; Background steps just assert preconditions are met.
+# the real data; Background steps just assert preconditions are met before
+# any scenario runs.
 # ---------------------------------------------------------------------------
 
 @given("the raw draft CSV exists")
@@ -44,8 +45,9 @@ def step_cleaning_script_run(cleaned_csv_path: Path) -> None:
 
 
 # ---------------------------------------------------------------------------
-# Shared loader: reuse the session-scoped cleaned_df from conftest to avoid
-# re-reading the CSV from disk for every scenario.
+# Shared loader: re-expose the session-scoped cleaned_df from conftest under
+# a short alias so step functions can declare `df` without needing to know
+# which year or fixture name produced it.
 # ---------------------------------------------------------------------------
 
 @pytest.fixture
@@ -93,6 +95,8 @@ def step_no_header_rows(df: pd.DataFrame) -> None:
 
 @then('players with "(Keeper)" in the raw name have Keeper equal to True')
 def step_keeper_true(df: pd.DataFrame) -> None:
+    # Verify the raw file actually contains keeper picks before asserting the
+    # cleaned output reflects them — avoids a false-pass on a year with no keepers.
     raw_text = RAW_CSV.read_text(encoding="utf-8-sig")
     raw_lines_with_keeper = [
         line for line in raw_text.splitlines()
@@ -106,9 +110,13 @@ def step_keeper_true(df: pd.DataFrame) -> None:
 
 @then('players without "(Keeper)" in the raw name have Keeper equal to False')
 def step_non_keeper_false(df: pd.DataFrame) -> None:
+    # The overall pick (Pick-Num == 1) is virtually never a keeper in practice,
+    # giving us a concrete non-keeper row to spot-check.
     first_pick = df[df["Pick-Num"] == 1]
     if not first_pick.empty:
         assert not first_pick.iloc[0]["Keeper"], "Pick-Num 1 should not be a keeper"
+    # The league typically has far more regular picks than keeper picks, so this
+    # ratio sanity-check would catch a bug that sets all rows to Keeper=True.
     assert len(df[df["Keeper"] == False]) > len(df[df["Keeper"] == True]), (
         "Expected more non-keeper picks than keeper picks"
     )
